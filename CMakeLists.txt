@@ -3,5 +3,5 @@ project(banking-system)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES main.cpp src/Address.cpp src/Address.h src/User.cpp src/sha256.cpp src/sha256.h)
+file(GLOB SOURCE_FILES src/*.cpp src/*.h sqlite/*.cpp sqlite/*.h sqlite/sqlite3.c)
 add_executable(banking-system ${SOURCE_FILES})
