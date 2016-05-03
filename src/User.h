@@ -9,8 +9,6 @@
 #include "../sqlite/SQLiteCpp.h"
 #include "Date.h"
 
-class Transaction;
-
 class User {
 protected:
     Address _address;

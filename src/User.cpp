@@ -70,6 +70,21 @@ User::~User()
 
 }*/
 
+User::User(const std::string lastName, const std::string firstName) {
+    _lastName = lastName;
+    _firstName = firstName;
+}
+
+User::User(const std::string lastName, const std::string firstName, const Date birthDate) {
+    _lastName = lastName;
+    _firstName = firstName;
+    _birthDate = birthDate;
+}
+
+unsigned int User::getId() const {
+    return _id;
+}
+
 void User::init(map<string, string> data){
     this->deserialization(data);
 }
