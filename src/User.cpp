@@ -43,28 +43,6 @@ User::User()
     _phone = "Inconnu";
 }
 
-User::User(const int id) // Get a User from an ID provided by DB
-{
-    map<string, string> data = BaseModel::getById(_dbTable, id);
-
-    if (!data.empty())
-    {
-        _id = id;
-        _firstName = data["name"];
-        _lastName = data["surname"];
-        _birthDate = Date(data["birthdate"]);
-        _phone = data["phone"];
-        _address = Address(stoi(data["house_number"]), data["street"], data["postal_code"], data["town"], data["country"]);
-        _isAdmin = stoi(data["isadmin"]);
-        _quota = stoi(data["quota"]);
-        _password = data["password"];
-    }
-    else
-    {
-        throw invalid_argument("Merci d'entrer un utilisateur valide");
-    }
-}
-
 User::~User()
 {
 
@@ -79,6 +57,27 @@ User::User(const std::string lastName, const std::string firstName, const Date b
     _lastName = lastName;
     _firstName = firstName;
     _birthDate = birthDate;
+}
+
+User::User(const int id) // Get a User from an ID provided by DB
+{
+    map<string, string> data = BaseModel::getById(_dbTable, id);
+
+    if (!data.empty())
+    {
+        _id = id;
+        _firstName = data["name"];
+        _lastName = data["surname"];
+        _birthDate = Date(data["birthdate"]);
+        _phone = data["phone"];
+        _address = Address(stoi(data["house_number"]), data["street"], data["postal_code"], data["town"], data["country"]);
+        _isAdmin = stoi(data["isadmin"]);
+        _password = data["password"];
+    }
+    else
+    {
+        throw invalid_argument("Merci d'entrer un utilisateur valide");
+    }
 }
 
 unsigned int User::getId() const {
