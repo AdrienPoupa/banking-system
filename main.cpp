@@ -1,6 +1,7 @@
 #include <iostream>
 #include "src/Address.h"
 #include "src/User.h"
+#include "src/Bank.h"
 
 using namespace std;
 
@@ -11,7 +12,10 @@ int main() {
     cout << *address << endl;
 
     User* user = new User("Adrien", "Le Roy");
-    cout << *user << endl;
-
+    user->save();
+    User* test = new User(1);
+    cout << *test << endl;
+    Bank* bank = Bank::getSingleton();
+    bank->run();
     return 0;
 }

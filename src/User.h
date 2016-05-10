@@ -30,8 +30,9 @@ public:
     ~User();
     User(int id); // Get a person from an ID provided by DB*/
 
-    User(const std::string lastName = "John", const std::string firstName = "Doe");
+    User(const std::string lastName = "John", const std::string firstName = "Doe", const std::string password = "123");
     User(const std::string lastName, const std::string firstName, const Date birthDate);
+    User(const int id); // Get a User from an ID provided by DB
 
     unsigned int getId() const;
 

@@ -1,5 +1,5 @@
 #include <thread>
-#include <c++/iostream>
+#include <iostream>
 #include "User.h"
 #include "Address.h"
 #include "BaseModel.h"
@@ -42,7 +42,7 @@ User::User()
 
     _phone = "Inconnu";
 }
-
+*/
 User::User(const int id) // Get a User from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
@@ -56,7 +56,6 @@ User::User(const int id) // Get a User from an ID provided by DB
         _phone = data["phone"];
         _address = Address(stoi(data["house_number"]), data["street"], data["postal_code"], data["town"], data["country"]);
         _isAdmin = stoi(data["isadmin"]);
-        _quota = stoi(data["quota"]);
         _password = data["password"];
     }
     else
@@ -64,21 +63,23 @@ User::User(const int id) // Get a User from an ID provided by DB
         throw invalid_argument("Merci d'entrer un utilisateur valide");
     }
 }
-
+/*
 User::~User()
 {
 
 }*/
 
-User::User(const std::string lastName, const std::string firstName) {
+User::User(const std::string lastName, const std::string firstName, const std::string password) {
     _lastName = lastName;
     _firstName = firstName;
+    _password = sha256(password);
 }
 
-User::User(const std::string lastName, const std::string firstName, const Date birthDate) {
+User::User(const std::string lastName, const std::string firstName, const Date birthDate){
     _lastName = lastName;
     _firstName = firstName;
     _birthDate = birthDate;
+
 }
 
 unsigned int User::getId() const {
@@ -310,6 +311,7 @@ void User::edit()
 
 bool User::save()
 {
+    cout << _password<< endl;
     int res = BaseModel::save(_dbTable, {
         {"id", {to_string(_id), "int"}},
         {"name", {_firstName, "string"}},
@@ -324,7 +326,6 @@ bool User::save()
         {"isadmin", {to_string(_isAdmin), "int"}},
         {"password", {_password, "string"}}
     });
-
     if (_id == 0)
     {
         _id = res["id"];
