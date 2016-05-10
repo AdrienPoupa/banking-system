@@ -27,8 +27,8 @@ public:
    /* User(const std::string firstName, const std::string lastName, const Date birthDate,
          const std::string phone = "Inconnu", const int _isAdmin = 0, const int _quota = 1, const std::string password = "");
     User();
-    ~User();
-    User(int id); // Get a person from an ID provided by DB*/
+    ~User();*/
+    User(int id); // Get a person from an ID provided by DB
 
     User(const std::string lastName = "John", const std::string firstName = "Doe", const std::string password = "123");
     User(const std::string lastName, const std::string firstName, const Date birthDate);
