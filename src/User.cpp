@@ -1,7 +1,6 @@
 #include <thread>
 #include <iostream>
 #include "User.h"
-#include "Address.h"
 #include "BaseModel.h"
 #include "sha256.h"
 
@@ -60,7 +59,7 @@ User::User(const int id) // Get a User from an ID provided by DB
     }
     else
     {
-        throw invalid_argument("Merci d'entrer un utilisateur valide");
+        throw invalid_argument("Please enter a valid ID");
     }
 }
 /*

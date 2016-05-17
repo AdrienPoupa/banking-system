@@ -4,14 +4,37 @@
 
 
 #include "Order.h"
+#include "BaseModel.h"
+
+using namespace std;
 
 /**
  * Order implementation
  */
 
-Order::Order(const Date creation, const Date sent, char type, unsigned int user_id) : _creation(_creation),
-                                                                               _sent(_sent), _type(_type),
-                                                                               _user_id(_user_id) { }
+string Order::_dbTable = "orders";
+
+Order::Order(const Date creation, const Date sent, int type, User user) : _creation(creation),
+                                                                               _sent(sent),
+                                                                                _type(type),
+                                                                               _user(user) { }
+
+Order::Order(const unsigned int id) {
+    map<string, string> data = BaseModel::getById(_dbTable, id);
+
+    if (!data.empty())
+    {
+        _id = id;
+        _creation = Date(data["creation"]);
+        _sent = Date(data["sent"]);
+        _type = stoi(data["type"]);
+        _user = User(stoi(data["user"]));
+    }
+    else
+    {
+        throw invalid_argument("Please enter a valid ID");
+    }
+}
 
 unsigned int Order::getId() {
     return _id;
@@ -33,20 +56,20 @@ Date Order::getSent() {
     return _sent;
 }
 
-void Order::setType(char type) {
+void Order::setType(int type) {
     _type = type;
 }
 
-char Order::getType() {
+int Order::getType() {
     return _type;
 }
 
-void Order::setUserId(unsigned int user_id) {
-    _user_id = user_id;
+void Order::setUser(User user) {
+    _user = user;
 }
 
-unsigned int Order::getUserId() {
-    return _user_id;
+User Order::getUser() {
+    return _user;
 }
 
 void Order::OrderCheckbook() {
@@ -57,6 +80,25 @@ void Order::OrderCreditCard() {
 
 }
 
-bool Order::save() {
-    return true;
+bool Order::save()
+{
+    int res = BaseModel::save(_dbTable, {
+            {"id", {to_string(_id), "int"}},
+            {"creation", {_creation.dateToDB(), "string"}},
+            {"sent", {_sent.dateToDB(), "string"}},
+            {"user", {to_string(_user.getId()), "int"}},
+            {"type", {to_string(_type), "int"}},
+    });
+    if (_id == 0)
+    {
+        _id = res["id"];
+    }
+
+    return (bool) res;
 }
+bool Order::remove()
+{
+    return BaseModel::remove(_dbTable, _id);
+}
+
+// todo everywhere: load >> <<

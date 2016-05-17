@@ -7,18 +7,20 @@
 #define _ORDER_H
 
 #include "Date.h"
+#include "User.h"
 
 class Order {
 protected:
     unsigned int _id;
     Date _creation;
     Date _sent;
-    char _type;
-    unsigned int _user_id;
-public:
-    Order(const Date creation, const Date sent, char type, unsigned int user_id);
+    int _type;
+    User _user;
 
-    // todo: Order from ID
+    static std::string _dbTable;
+public:
+    Order(const Date creation, const Date sent, int type, User user);
+    Order(const unsigned int id)
 
     unsigned int getId();
 
@@ -28,17 +30,19 @@ public:
     void setSent(Date sent);
     Date getSent();
 
-    void setType(char type);
-    char getType();
+    void setType(int type);
+    int getType();
 
-    void setUserId(unsigned int user_id);
-    unsigned int getUserId();
+    void setUser(User user);
+    User getUser();
 
     void OrderCheckbook();
 
     void OrderCreditCard();
 
     bool save();
+
+    bool remove();
 };
 
 #endif //_ORDER_H
