@@ -16,6 +16,7 @@ using namespace std;
  * Client implementation
  */
 
+
 Client::Client(const unsigned int id) // Get a Client from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
@@ -29,6 +30,7 @@ Client::Client(const unsigned int id) // Get a Client from an ID provided by DB
         _phone = data["phone"];
         _address = Address(stoi(data["house_number"]), data["street"], data["postal_code"], data["town"], data["country"]);
         _isAdmin = stoi(data["isadmin"]);
+        _isAdvisor = stoi(data["isadvisor"]);
         _password = data["password"];
     }
     else
@@ -41,7 +43,7 @@ Client::~Client()
 {
 
 }*/
-void User::getBankAccounts() {
+void Client::getBankAccounts() {
     map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id, swift, BIC,id_user,balance");
 
     int totalAccount = (int)bankAccount.size();

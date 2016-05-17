@@ -42,44 +42,11 @@ User::User()
     _phone = "Inconnu";
 }
 */
-User::User(const int id) // Get a User from an ID provided by DB
-{
-    map<string, string> data = BaseModel::getById(_dbTable, id);
-
-    if (!data.empty())
-    {
-        _id = id;
-        _firstName = data["name"];
-        _lastName = data["surname"];
-        _birthDate = Date(data["birthdate"]);
-        _phone = data["phone"];
-        _address = Address(stoi(data["house_number"]), data["street"], data["postal_code"], data["town"], data["country"]);
-        _isAdmin = stoi(data["isadmin"]);
-        _password = data["password"];
-    }
-    else
-    {
-        throw invalid_argument("Please enter a valid ID");
-    }
-}
 /*
 User::~User()
 {
 
 }*/
-
-User::User(const std::string lastName, const std::string firstName, const std::string password) {
-    _lastName = lastName;
-    _firstName = firstName;
-    _password = sha256(password);
-}
-
-User::User(const std::string lastName, const std::string firstName, const Date birthDate){
-    _lastName = lastName;
-    _firstName = firstName;
-    _birthDate = birthDate;
-
-}
 
 unsigned int User::getId() const {
     return _id;
@@ -98,6 +65,7 @@ void User::deserialization(map<string, string> data){
         _phone = data["phone"];
         _address = Address(data.find("house_number") != data.end() ? stoi(data["house_number"]) : 0, data["street"], data["postal_code"], data["town"], data["country"]);
         _isAdmin = data.find("isadmin") != data.end() ? stoi(data["isadmin"]) : 0;
+        _isAdvisor=data.find("isadvisor") != data.end() ? stoi(data["isadvisor"]) : 0;
         _password = data["password"];
     }
 }
@@ -106,7 +74,10 @@ string User::getPhone() const
 {
     return _phone;
 }
-
+string User::getPassword() const
+{
+    return _password;
+}
 void User::setPhone(const string phone)
 {
     _phone = phone;
@@ -140,6 +111,11 @@ void User::setAddress(const Address address)
 bool User::isAdmin() const
 {
     return (bool) _isAdmin;
+}
+
+bool User::isAdvisor() const
+{
+    return (bool) _isAdvisor;
 }
 
 void User::setAdmin(const int isAdmin)

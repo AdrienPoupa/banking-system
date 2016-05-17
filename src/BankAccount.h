@@ -11,6 +11,7 @@
 #include <iostream>
 #include "User.h"
 #include "BaseModel.h"
+#include "Client.h"
 
 class BankAccount {
 protected:
