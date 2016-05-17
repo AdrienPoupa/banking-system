@@ -193,12 +193,12 @@ string Date::dateToDB() const
 ostream& operator<< (ostream& stream, const Date& date)
 {
    static string name[] =
-   {"inconnu", "Janvier", "Fevrier", "Mars", "Avril",
-    "Mai", "Juin", "Juillet", "Aout", "Septembre",
-    "Octobre", "Novembre", "Decembre"};
+   {"unknown", "January", "February", "March", "April",
+    "May", "June", "July", "August", "September",
+    "October", "November", "December"};
 
     if(date._year == -1 && date._month == -1 && date._day == -1){
-        stream << "inconnu";
+        stream << "unknown";
     }
     else {
         stream << (date._day != -1 ? to_string(date._day) + " " : "") << (date._month != -1 ? name[date._month] + " ": "") << (date._year != -1 ? to_string(date._year) : "");
@@ -210,17 +210,17 @@ istream& operator>> (istream& stream, Date& date)
 {
 
     do {
-        cout << "Saisissez le jour (de 1 a 31, ou -1 si inconnu) : " << endl;
+        cout << "Enter day (1 to 31, -1 if unknown) : " << endl;
         stream >> date._day;
     }while(date._day < -1 && date._day > 31 && date._day == 0);
     
     do {
-        cout << "Saisissez le mois (de 1 a 12, ou -1 si inconnu) : " << endl;
+        cout << "Enter month (de 1 a 12, -1 if unknown) : " << endl;
         stream >> date._month;
     }while(date._month < -1 && date._month > 12 && date._month == 0);
     
     do{
-        cout << "Saisissez l'annee (-1 si inconnu): " << endl;
+        cout << "Enter year (-1 if unknown): " << endl;
         stream >> date._year;
     }while(date._year < -1 && date._year > 9000);
     

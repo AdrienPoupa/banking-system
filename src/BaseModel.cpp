@@ -236,8 +236,6 @@ bool BaseModel::remove(const string& table, const int& id)
         SQLite::Statement   query(db, "DELETE FROM " + table + " WHERE id=?");
         query.bind(1, (int) id);
         query.exec();
-
-        return true;
     }
     catch (exception& e)
     {
