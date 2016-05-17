@@ -13,6 +13,11 @@
 class Advisor: public User {
 public:
 
+    Advisor(int unsigned id); // Get a person from an ID provided by DB
+
+    Advisor(const std::string lastName = "John", const std::string firstName = "Doe", const std::string password = "123");
+    Advisor(const std::string lastName, const std::string firstName, const Date birthDate);
+
     void ValidateLoan();
 
     void CreateBankAccount();
