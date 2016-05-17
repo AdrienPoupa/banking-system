@@ -20,7 +20,7 @@ protected:
     static std::string _dbTable;
 public:
     Loan(const Date creation, const Date validation, const User sender, const bool approved);
-    Loan (const unsigned int id)
+    Loan (const unsigned int id);
 
     unsigned int getId() const;
 

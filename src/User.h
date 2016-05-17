@@ -25,12 +25,6 @@ protected:
     Date _birthDate;
 
 public:
-   /* User(const std::string firstName, const std::string lastName, const Date birthDate,
-         const std::string phone = "Inconnu", const int _isAdmin = 0, const int _quota = 1, const std::string password = "");
-    User();
-    ~User();*/
-
-
     unsigned int getId() const;
 
     std::string getLastName() const;

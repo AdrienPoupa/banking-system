@@ -5,6 +5,7 @@
 
 #include "Order.h"
 #include "BaseModel.h"
+#include "Client.h"
 
 using namespace std;
 
@@ -28,7 +29,7 @@ Order::Order(const unsigned int id) {
         _creation = Date(data["creation"]);
         _sent = Date(data["sent"]);
         _type = stoi(data["type"]);
-        _user = User(stoi(data["user"]));
+        _user = Client((unsigned) stoi(data["user"]));
     }
     else
     {

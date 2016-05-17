@@ -61,7 +61,7 @@ void Transaction::setDescription(std::string description) {
 }
 
 std::string Transaction::getDescription() {
-    return _description
+    return _description;
 }
 
 bool Transaction::save()

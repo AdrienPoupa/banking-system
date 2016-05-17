@@ -5,10 +5,11 @@
 
 #include "Loan.h"
 #include "BaseModel.h"
+#include "Client.h"
 
 using namespace std;
 
-string User::_dbTable = "loans";
+string Loan::_dbTable = "loans";
 
 /**
  * Loan implementation
@@ -25,7 +26,7 @@ Loan::Loan(const unsigned int id) {
     if (!data.empty())
     {
         _id = id;
-        _sender = User(stoi(data["sender"]));
+        _sender = Client((unsigned) stoi(data["sender"]));
         _creation = Date(data["creation"]);
         _validation = Date(data["validation"]);
         _approved = (bool) stoi(data["approved"]);

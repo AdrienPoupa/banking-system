@@ -20,7 +20,7 @@ protected:
     static std::string _dbTable;
 public:
     Order(const Date creation, const Date sent, int type, User user);
-    Order(const unsigned int id)
+    Order(const unsigned int id);
 
     unsigned int getId();
 
