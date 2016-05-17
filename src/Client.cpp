@@ -41,7 +41,58 @@ Client::~Client()
 {
 
 }*/
+void User::getBankAccounts() {
+    map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id, swift, BIC,id_user,balance");
 
+    int totalAccount = (int)bankAccount.size();
+
+    int idToOpen;
+    set<int> AccountIds = set<int>();
+    bool correctId = false;
+
+    for(int i=0; i < totalAccount; i++){
+        cout << getLastName() << " "<< bankAccount[i]["SWIFT"]<<endl;
+    }
+
+    do{
+        string swiftspace;
+        string bicSpace;
+        string idSpace;
+        cout << "-------------------------------------------------------" << endl;
+        cout << " -- Account's list of "<< getLastName() << " " << getFirstName() <<" --" << endl;
+        cout << " ID |       SWIFT       |     BIC     " << endl;
+        cout << "----|-------------------|--------------" << endl;
+        for (int i = 1; i != totalAccount + 1; i++)
+        {
+            if(stoi(bankAccount[i]["id_user"]) == getId()) {
+                cout << bankAccount[i]["id"] << "     " << bankAccount[i]["SWIFT"] << "          " <<
+                bankAccount[i]["BIC"] << endl;
+                AccountIds.insert(stoi(bankAccount[i]["id"]));
+            }
+        }
+
+        cout << endl << "Bank account's id : " << endl;
+        cin >> idToOpen;
+
+        if(cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        else
+        {
+            correctId = AccountIds.find(idToOpen) != AccountIds.end();
+        }
+
+        if (!correctId)
+        {
+            cout << "Identifiant inconnu ..." << endl;
+        }
+
+    } while(!correctId);
+    BankAccount *bc = new BankAccount(idToOpen);
+    cout << *bc<<endl;
+}
 Client::Client(const std::string lastName, const std::string firstName, const std::string password) {
     _lastName = lastName;
     _firstName = firstName;

@@ -4,32 +4,34 @@
 
 
 #include "BankAccount.h"
-
+using namespace std;
 /**
  * BankAccount implementation
  */
 
-BankAccount::BankAccount(unsigned int user_id, const string swift, const string bic) :_user_id(user_id),
+string BankAccount::_dbTable = "bank_account";
+
+BankAccount::BankAccount(unsigned int user_id, const string swift, const string bic) :_idUser(user_id),
                                                                                          _swift(swift),
                                                                                          _bic(bic) { }
 
-unsigned int BankAccount::getId() {
+unsigned int BankAccount::getId() const{
     return _id;
 }
 
 void BankAccount::setUserId(unsigned int user_id) {
-    _user_id = user_id;
+    _idUser = user_id;
 }
 
-unsigned int BankAccount::getUserId() {
-    return _user_id;
+unsigned int BankAccount::getUserId() const {
+    return _idUser;
 }
 
 void BankAccount::setBic(std::string bic) {
     _bic = bic;
 }
 
-std::string BankAccount::getBic() {
+std::string BankAccount::getBic() const {
     return _bic;
 }
 
@@ -37,7 +39,7 @@ void BankAccount::setSwift(std::string swift) {
     _swift = swift;
 }
 
-std::string BankAccount::getSwift() {
+std::string BankAccount::getSwift() const {
     return _swift;
 }
 BankAccount::BankAccount(){

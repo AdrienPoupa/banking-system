@@ -7,7 +7,7 @@
 #define _CLIENT_H
 
 #include "User.h"
-
+#include "BankAccount.h"
 
 class Client: public User {
 public:
@@ -17,6 +17,7 @@ public:
     Client(const std::string lastName = "John", const std::string firstName = "Doe", const std::string password = "123");
     Client(const std::string lastName, const std::string firstName, const Date birthDate);
 
+    void getBankAccounts();
     void ContactAdvisor();
 
     void LoanApplication();
