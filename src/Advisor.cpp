@@ -29,6 +29,7 @@ Advisor::Advisor(const unsigned int id) // Get a Advisor from an ID provided by 
         _phone = data["phone"];
         _address = Address(stoi(data["house_number"]), data["street"], data["postal_code"], data["town"], data["country"]);
         _isAdmin = stoi(data["isadmin"]);
+        _isAdvisor = stoi(data["isadmin"]);
         _password = data["password"];
     }
     else
@@ -55,7 +56,7 @@ Advisor::Advisor(const std::string lastName, const std::string firstName, const 
 
 }
 
-/*void Advisor::getUserBankAccounts() {
+void Advisor::getUserBankAccounts() {
     map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname, isadmin");
 
     int totalUsers = (int)users.size();
@@ -65,7 +66,7 @@ Advisor::Advisor(const std::string lastName, const std::string firstName, const 
     bool correctId = false;
     do{
         cout << "-------------------------------------------------------" << endl;
-        cout << " -- Liste des comptes disponibles pour la connexion --" << endl;
+        cout << " -- Client's list --" << endl;
         cout << " Identifiant | Prenom Nom " << endl;
         cout << "-------------|-------------------" << endl;
         for (int i = 1; i != totalUsers + 1; i++)
@@ -80,12 +81,12 @@ Advisor::Advisor(const std::string lastName, const std::string firstName, const 
             {
                 star = "* ";
             }
-
+            if(users[i]["isadmin"] != "1" && users[i]["isadvisor"] != "1")
             cout << space << users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] << endl;
             userIds.insert(stoi(users[i]["id"]));
         }
 
-        cout << endl << "Identifiant de connexion : " << endl;
+        cout << endl << "Client's id : " << endl;
         cin >> idToOpen;
 
         if(cin.fail())
@@ -107,7 +108,7 @@ Advisor::Advisor(const std::string lastName, const std::string firstName, const 
 
     Client *client = new Client(idToOpen);
     client->getBankAccounts();
-}*/
+}
 
 void Advisor::ValidateLoan() {
 

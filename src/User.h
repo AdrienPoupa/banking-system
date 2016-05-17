@@ -63,7 +63,6 @@ public:
     bool isAdmin()const ;
     void setAdmin(const int isAdmin);
 
-    void getBankAccounts();
     void edit();
 
     bool save();

@@ -142,17 +142,20 @@ bool Bank::connect()
         }
 
     } while(!correctId);
-    User accountToOpen;
+    //User accountToOpen;
     if(stoi(users[correctId]["isadvisor"]) == 1){
         Advisor accountToOpen(idToOpen);
+        _currentUser=accountToOpen;
     }
     else if(stoi(users[correctId]["isadmin"]) == 1){
         Administrator accountToOpen(idToOpen);
+        _currentUser=accountToOpen;
     }
     else{
         Client accountToOpen(idToOpen);
+        _currentUser=accountToOpen;
     }
-    _currentUser=accountToOpen;
+
 
     int essai = 3;
     while(!correctPass && essai > 0)
@@ -160,8 +163,7 @@ bool Bank::connect()
         cout << "Mot de passe de connexion : " << endl;
         string inputPassword;
         cin >> inputPassword;
-
-          if (sha256(inputPassword) == _currentUser.getPassword())
+        if (sha256(inputPassword) == _currentUser.getPassword())
         {
             correctPass = true;
         }
@@ -234,18 +236,24 @@ int Bank::displayMenu()
 
 void Bank::redirectChoice(const int choice)
 {
+    cout<< _currentUser.isAdvisor()<<endl;
     switch (choice)
     {
         // User action
         case 0:
             return;
             break;
-            /* case 1:
-                 if(_currentUser.isAdvisor()){
-                     _currentUser.getUserBankAccounts();
+             case 1:
+                if(_currentUser.isAdvisor()){
+                    Advisor advisor= Advisor(_currentUser.getId());
+                    advisor.getUserBankAccounts();
                  }
-                 _currentUser.getBankAccounts();
+            else if(_currentUser.isAdvisor()){
+                    Client client= Client(_currentUser.getId());
+                    client.getBankAccounts();
+                }
                  break;
+            /*
              case 2:
                  getListEntity<Dvd>();
                  break;

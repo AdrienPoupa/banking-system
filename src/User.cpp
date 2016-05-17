@@ -66,6 +66,7 @@ void User::deserialization(map<string, string> data){
         _phone = data["phone"];
         _address = Address(data.find("house_number") != data.end() ? stoi(data["house_number"]) : 0, data["street"], data["postal_code"], data["town"], data["country"]);
         _isAdmin = data.find("isadmin") != data.end() ? stoi(data["isadmin"]) : 0;
+        _isAdvisor=data.find("isadvisor") != data.end() ? stoi(data["isadvisor"]) : 0;
         _password = data["password"];
     }
 }
