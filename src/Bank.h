@@ -9,7 +9,7 @@
 
 #ifdef _WIN32
 #define CLEAN_SCREEN "CLS"
-#include "mingw.thread.hpp"
+#include "mingw.thread.h"
 #else
 #define CLEAN_SCREEN "clear"
 #include <thread>
