@@ -14,9 +14,12 @@
 #define CLEAN_SCREEN "clear"
 #include <thread>
 #endif
-
+#include "sha256.h"
 #include "BaseModel.h"
 #include "User.h"
+#include "Advisor.h"
+#include "Administrator.h"
+#include "Client.h"
 #include "../sqlite/SQLiteCpp.h"
 
 class Bank {

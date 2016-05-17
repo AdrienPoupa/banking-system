@@ -16,6 +16,7 @@ using namespace std;
  * Client implementation
  */
 
+
 Client::Client(const unsigned int id) // Get a Client from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);

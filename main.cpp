@@ -7,12 +7,8 @@
 using namespace std;
 
 int main() {
-    cout << "Hello, World!" << endl;
-
-    Address* address = new Address(1, "Test", "67000", "Test", "Malaysia");
-    cout << *address << endl;
-
-
+    User *user = new Client("John","Doe");
+    user->save();
     Bank* bank = Bank::getSingleton();
     bank->run();
 

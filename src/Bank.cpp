@@ -89,16 +89,19 @@ void Bank::run()
 
 bool Bank::connect()
 {
-    map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname, isadmin");
+    map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname, isadmin, isadvisor");
 
     int totalUsers = (int)users.size();
 
     int idToOpen;
     set<int> userIds = set<int>();
     bool correctId = false;
+    bool correctPass = false;
     do{
         cout << "-------------------------------------------------------" << endl;
-        cout << " -- Liste des comptes disponibles pour la connexion --" << endl;
+        cout << " -- Account list for connexion--" << endl;
+        cout << " -- * -> Advisor --" << endl;
+        cout << " -- ** -> Admin --" << endl;
         cout << " Identifiant | Prenom Nom " << endl;
         cout << "-------------|-------------------" << endl;
         for (int i = 1; i != totalUsers + 1; i++)
@@ -108,13 +111,15 @@ bool Bank::connect()
             for(unsigned int i = 0; i < (11 - users[i]["id"].length()); i++){
                 space += " ";
             }
-
             if (users[i]["isadmin"] == "1")
             {
-                star = "* ";
+                star = "**";
+            }
+            if(users[i]["isadvisor"] == "1"){
+                star = "*";
             }
 
-            cout << space << users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] << endl;
+            cout << space<< users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] << endl;
             userIds.insert(stoi(users[i]["id"]));
         }
 
@@ -137,19 +142,30 @@ bool Bank::connect()
         }
 
     } while(!correctId);
-
-    User accountToOpen(idToOpen);
-    _currentUser = accountToOpen;
+    User accountToOpen;
+    if(stoi(users[correctId]["isadvisor"]) == 1){
+        Advisor accountToOpen(idToOpen);
+    }
+    else if(stoi(users[correctId]["isadmin"]) == 1){
+        Administrator accountToOpen(idToOpen);
+    }
+    else{
+        Client accountToOpen(idToOpen);
+    }
+    _currentUser=accountToOpen;
 
     int essai = 3;
-    bool correctPass = false;
     while(!correctPass && essai > 0)
     {
         cout << "Mot de passe de connexion : " << endl;
         string inputPassword;
         cin >> inputPassword;
 
-        correctPass = _currentUser.checkPassword(inputPassword);
+          if (sha256(inputPassword) == _currentUser.getPassword())
+        {
+            correctPass = true;
+        }
+        _currentUser.checkPassword(inputPassword);
         essai--;
 
         if (correctPass)
@@ -224,10 +240,12 @@ void Bank::redirectChoice(const int choice)
         case 0:
             return;
             break;
-             case 1:
+            /* case 1:
+                 if(_currentUser.isAdvisor()){
+                     _currentUser.getUserBankAccounts();
+                 }
                  _currentUser.getBankAccounts();
                  break;
-            /*
              case 2:
                  getListEntity<Dvd>();
                  break;

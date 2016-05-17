@@ -49,7 +49,7 @@ BankAccount::BankAccount(std::string swift, std::string bic, int idUser){
     _swift = swift;
     _bic = bic;
     try {
-        User *user = new User(idUser);
+        User *user = new Client(idUser);
     }
     catch (exception e){
         cout << e.what()<<endl;
@@ -96,7 +96,7 @@ int BankAccount::getBalance() const{
 
 ostream& operator<< (ostream& stream, const BankAccount& bankAccount)
 {
-    User* user = new User(bankAccount._idUser);
+    User* user = new Client(bankAccount._idUser);
     stream << "Bank account n°: "<< bankAccount.getId()<<endl;
     stream << "Owner: " << user->getFirstName() << " " << user->getLastName() << endl;
     stream << "Balance: " << bankAccount._balance << endl;
