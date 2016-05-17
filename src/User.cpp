@@ -47,19 +47,18 @@ User::User(const int id) // Get a User from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
 
-    if (!data.empty())
-    {
+    if (!data.empty()) {
         _id = id;
         _firstName = data["name"];
         _lastName = data["surname"];
         _birthDate = Date(data["birthdate"]);
         _phone = data["phone"];
-        _address = Address(stoi(data["house_number"]), data["street"], data["postal_code"], data["town"], data["country"]);
+        _address = Address(stoi(data["house_number"]), data["street"], data["postal_code"], data["town"],
+                           data["country"]);
         _isAdmin = stoi(data["isadmin"]);
         _password = data["password"];
     }
-    else
-    {
+    else {
         throw invalid_argument("Merci d'entrer un utilisateur valide");
     }
 }
@@ -311,7 +310,6 @@ void User::edit()
 
 bool User::save()
 {
-    cout << _password<< endl;
     int res = BaseModel::save(_dbTable, {
         {"id", {to_string(_id), "int"}},
         {"name", {_firstName, "string"}},
@@ -334,6 +332,58 @@ bool User::save()
     return (bool) res;
 }
 
+void User::getBankAccounts() {
+    map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id, swift, BIC,id_user,balance");
+
+    int totalAccount = (int)bankAccount.size();
+
+    int idToOpen;
+    set<int> AccountIds = set<int>();
+    bool correctId = false;
+
+    for(int i=0; i < totalAccount; i++){
+        cout << getLastName() << " "<< bankAccount[i]["SWIFT"]<<endl;
+    }
+
+    do{
+        string swiftspace;
+        string bicSpace;
+        string idSpace;
+        cout << "-------------------------------------------------------" << endl;
+        cout << " -- Account's list of "<< getLastName() << " " << getFirstName() <<" --" << endl;
+        cout << " ID |       SWIFT       |     BIC     " << endl;
+        cout << "----|-------------------|--------------" << endl;
+        for (int i = 1; i != totalAccount + 1; i++)
+        {
+            if(stoi(bankAccount[i]["id_user"]) == getId()) {
+                cout << bankAccount[i]["id"] << "     " << bankAccount[i]["SWIFT"] << "          " <<
+                bankAccount[i]["BIC"] << endl;
+                AccountIds.insert(stoi(bankAccount[i]["id"]));
+            }
+        }
+
+        cout << endl << "Bank account's id : " << endl;
+        cin >> idToOpen;
+
+        if(cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        else
+        {
+            correctId = AccountIds.find(idToOpen) != AccountIds.end();
+        }
+
+        if (!correctId)
+        {
+            cout << "Identifiant inconnu ..." << endl;
+        }
+
+    } while(!correctId);
+    BankAccount *bc = new BankAccount(idToOpen);
+    cout << *bc<<endl;
+}
 bool User::remove()
 {
     return BaseModel::remove(_dbTable, _id);

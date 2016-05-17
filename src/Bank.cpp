@@ -96,11 +96,9 @@ bool Bank::connect()
     int idToOpen;
     set<int> userIds = set<int>();
     bool correctId = false;
-
     do{
         cout << "-------------------------------------------------------" << endl;
         cout << " -- Liste des comptes disponibles pour la connexion --" << endl;
-        cout << " --   Les administrateurs sont indiques par une *   --" << endl;
         cout << " Identifiant | Prenom Nom " << endl;
         cout << "-------------|-------------------" << endl;
         for (int i = 1; i != totalUsers + 1; i++)
@@ -226,63 +224,64 @@ void Bank::redirectChoice(const int choice)
         case 0:
             return;
             break;
-        case 1:
-            getListEntity<Book>();
-            break;
-       /* case 2:
-            getListEntity<Dvd>();
-            break;
-        case 3:
-            getListEntity<Cd>();
-            break;
-        case 4:
-            getListEntity<Artist>();
-            break;
-        case 5:
-            borrowedMenu();
-            break;
-        case 6:
-            searchList();
-            break;
-            // Admin action
-        case 7:
-            getListEntity<User>();
-            break;
-        case 8:
-            getListEntity<Genre>();
-            break;
-        case 9:
-            getListEntity<Status>();
-            break;
-        case 10:
-            getListEntity<Transaction>();
-            break;
-        case 11:
-            addThing<User>();
-            break;
-        case 12:
-            addThing<Book>();
-            break;
-        case 13:
-            addThing<Cd>();
-            break;
-        case 14:
-            addThing<Dvd>();
-            break;
-        case 15:
-            addThing<Artist>();
-            break;
-        case 16:
-            addThing<Genre>();
-            break;
-        case 17:
-            addThing<Status>();
-            break;
-        case 18:
-            addThing<Transaction>();
-            break;
-        default:
-            return;
-            break;
-    }*/
+             case 1:
+                 _currentUser.getBankAccounts();
+                 break;
+            /*
+             case 2:
+                 getListEntity<Dvd>();
+                 break;
+             case 3:
+                 getListEntity<Cd>();
+                 break;
+             case 4:
+                 getListEntity<Artist>();
+                 break;
+             case 5:
+                 borrowedMenu();
+                 break;
+             case 6:
+                 searchList();
+                 break;
+                 // Admin action
+             case 7:
+                 getListEntity<User>();
+                 break;
+             case 8:
+                 getListEntity<Genre>();
+                 break;
+             case 9:
+                 getListEntity<Status>();
+                 break;
+             case 10:
+                 getListEntity<Transaction>();
+                 break;
+             case 11:
+                 addThing<User>();
+                 break;
+             case 12:
+                 addThing<Book>();
+                 break;
+             case 13:
+                 addThing<Cd>();
+                 break;
+             case 14:
+                 addThing<Dvd>();
+                 break;
+             case 15:
+                 addThing<Artist>();
+                 break;
+             case 16:
+                 addThing<Genre>();
+                 break;
+             case 17:
+                 addThing<Status>();
+                 break;
+             case 18:
+                 addThing<Transaction>();
+                 break;
+             default:
+                 return;
+                 break;*/
+         }
 }

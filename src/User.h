@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <set>
 #include <iostream>
-
+#include "BankAccount.h"
 #include "Address.h"
 #include "../sqlite/SQLiteCpp.h"
 #include "Date.h"
@@ -15,6 +15,7 @@ protected:
     std::string _phone;
     int _isAdmin = 0;
     std::string _password;
+    BankAccount _currentBankAccount = BankAccount();
 
     static std::string _dbTable;
 
@@ -28,9 +29,8 @@ public:
          const std::string phone = "Inconnu", const int _isAdmin = 0, const int _quota = 1, const std::string password = "");
     User();
     ~User();*/
-    User(int id); // Get a person from an ID provided by DB
 
-    User(const std::string lastName = "John", const std::string firstName = "Doe", const std::string password = "123");
+    User(const std::string lastName="John", const std::string firstName="Doe", const std::string password="123");
     User(const std::string lastName, const std::string firstName, const Date birthDate);
     User(const int id); // Get a User from an ID provided by DB
 
@@ -65,6 +65,7 @@ public:
     bool isAdmin()const ;
     void setAdmin(const int isAdmin);
 
+    void getBankAccounts();
     void edit();
 
     bool save();
