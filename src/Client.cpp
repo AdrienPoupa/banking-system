@@ -43,7 +43,7 @@ Client::~Client()
 {
 
 }*/
-void Client::getBankAccounts() {
+BankAccount* Client::getBankAccounts() {
     map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id, swift, BIC,id_user,balance");
 
     int totalAccount = (int)bankAccount.size();
@@ -90,11 +90,26 @@ void Client::getBankAccounts() {
     } while(!correctId);
     BankAccount *bc = new BankAccount(idToOpen);
     cout << *bc<<endl;
+    return bc;
 }
 Client::Client(const std::string lastName, const std::string firstName, const std::string password) {
     _lastName = lastName;
     _firstName = firstName;
     _password = sha256(password);
+}
+
+void Client::Transfer(){
+    int amountToTransfer;
+    BankAccount* bc = getBankAccounts();
+    cout << endl << "Amount to transfer : " << endl;
+    cin >> amountToTransfer;
+
+    if(bc->getBalance() < amountToTransfer){
+        cout << "Insufficient amount" << endl;
+    }
+    else{
+
+    }
 }
 
 Client::Client(const std::string lastName, const std::string firstName, const Date birthDate){
