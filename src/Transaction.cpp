@@ -3,6 +3,7 @@
 //
 
 #include "Transaction.h"
+#include <iostream>
 
 using namespace std;
 
@@ -83,4 +84,32 @@ bool Transaction::save()
 bool Transaction::remove()
 {
     return BaseModel::remove(_dbTable, _id);
+}
+
+ostream& operator<< (ostream& stream, const Transaction& transaction)
+{
+    stream << "Bank account:" << endl;
+    stream << transaction._account << endl;
+    stream << "Date:" << transaction._date << endl;
+    stream << "Amount:" << transaction._amount << endl;
+    stream << "Description:" << transaction._description << endl;
+    return stream;
+}
+
+istream& operator>> (std::istream& stream, Transaction& transaction)
+{
+    cout << "Bank account ID: " << endl;
+    int accountID;
+    stream >> accountID;
+    transaction._account = new BankAccount(accountID);
+    cout << "Date: " << endl;
+    stream >> transaction._date;
+    cout << "Amount: " << endl;
+    stream >> transaction._amount;
+    cout << "Description: " << endl;
+    stream.ignore(1, '\n');
+    getline(stream, transaction._description, '\n');
+
+    return stream;
+
 }

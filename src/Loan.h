@@ -39,6 +39,9 @@ public:
     bool save();
 
     bool remove();
+
+    friend std::ostream& operator<< (std::ostream& stream, const Loan& loan);
+    friend std::istream& operator>> (std::istream& stream, Loan& loan);
 };
 
 #endif //_LOAN_H

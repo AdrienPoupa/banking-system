@@ -8,6 +8,7 @@
 
 #include "Date.h"
 #include "User.h"
+#include "Client.h"
 
 class Order {
 protected:
@@ -15,11 +16,11 @@ protected:
     Date _creation;
     Date _sent;
     int _type;
-    User _user;
+    Client _user;
 
     static std::string _dbTable;
 public:
-    Order(const Date creation, const Date sent, int type, User user);
+    Order(const Date creation, const Date sent, int type, Client user);
     Order(const unsigned int id);
 
     unsigned int getId();
@@ -33,8 +34,8 @@ public:
     void setType(int type);
     int getType();
 
-    void setUser(User user);
-    User getUser();
+    void setUser(Client user);
+    Client getUser();
 
     void OrderCheckbook();
 
@@ -43,6 +44,9 @@ public:
     bool save();
 
     bool remove();
+
+    friend std::ostream& operator<< (std::ostream& stream, const Order& order);
+    friend std::istream& operator>> (std::istream& stream, Order& order);
 };
 
 #endif //_ORDER_H

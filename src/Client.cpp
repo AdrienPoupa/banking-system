@@ -85,7 +85,7 @@ BankAccount* Client::getBankAccounts() {
 
         if (!correctId)
         {
-            cout << "Identifiant inconnu ..." << endl;
+            cout << "Unknown ID ..." << endl;
         }
 
     } while(!correctId);

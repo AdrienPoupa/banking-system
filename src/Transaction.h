@@ -39,6 +39,9 @@ public:
     bool save();
 
     bool remove();
+
+    friend std::ostream& operator<< (std::ostream& stream, const Transaction& transaction);
+    friend std::istream& operator>> (std::istream& stream, Transaction& transaction);
 };
 
 
