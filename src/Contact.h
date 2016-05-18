@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <set>
 #include <iostream>
+#include "BankAccount.h"
+#include "Contact.h"
 #include "User.h"
 #include "BaseModel.h"
 #include "Client.h"
@@ -22,6 +24,7 @@ public:
     Contact(unsigned int idUser, unsigned int idAvisor, std::string message);
     Contact(int unsigned id); // Get a message from an ID provided by DB
     bool save();
+    friend std::ostream& operator<< (std::ostream& stream, const Contact& contact);
 
 };
 #endif //BANKING_SYSTEM_CONTACT_H

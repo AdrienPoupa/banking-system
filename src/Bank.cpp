@@ -266,7 +266,7 @@ void Bank::redirectChoice(const int choice)
              case 3:
                  if(_currentUser.isAdvisor()){
                      Advisor advisor= Advisor(_currentUser.getId());
-                     advisor.TransferMoneyUser();
+                     advisor.ConsultMessages();
                  }
                  else if(!_currentUser.isAdvisor() && !_currentUser.isAdmin()){
                      Client client= Client(_currentUser.getId());

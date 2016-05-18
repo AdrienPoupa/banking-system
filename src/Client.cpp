@@ -132,7 +132,8 @@ void Client::contactAdvisor() {
     Advisor *advisor = new Advisor(this->_idAdvisor);
     cout << "You are going to send a message to: " << advisor->getLastName() << " " << advisor->getFirstName() << endl;
     cout << "Enter the message you want to send." << endl;
-    cin >> message;
+    cin.ignore();
+    getline(cin, message);
     if(message !=""){
         Contact* contact = new Contact(this->_id, this->_idAdvisor, message);
         contact->save();

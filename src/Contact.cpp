@@ -45,3 +45,13 @@ bool Contact::save(){
 
     return (bool) res;
 }
+
+
+ostream& operator<< (ostream& stream, const Contact& contact)
+{
+    Contact* c = new Contact(contact._id);
+    Client *cl = new Client(c->_idClient);
+    stream << "Message from: "<< cl->getLastName()<< " " << cl->getFirstName()<< endl;
+    stream << "Content : " << c->_message << endl;
+    return stream;
+}

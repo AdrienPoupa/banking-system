@@ -119,7 +119,54 @@ void Advisor::TransferMoneyUser(){
     Client *client = getUsers();
     client->Transfer();
 }
+void Advisor::ConsultMessages() {
+    map<int, map<string, string>> messages = BaseModel::select("contact", "id, id_client, id_advisor, message");
 
+    int totalUsers = (int)messages.size();
+
+    unsigned int messageToOpen;
+    set<int> messageIds = set<int>();
+    bool correctId = false;
+    do{
+        cout << "-------------------------------------------------------" << endl;
+        cout << " -- Message's list --" << endl;
+        cout << " Id | Sender" << endl;
+        cout << "-------------|-------------------" << endl;
+        for (int i = 1; i != totalUsers + 1; i++)
+        {
+
+            Client *c = new Client(stoi(messages[i]["id_client"]));
+            if(stoi(messages[i]["id_advisor"]) == this->_id) {
+                cout << messages[i]["id"] << " | " << c->getLastName() << " " << c->getFirstName() <<
+                endl;
+                messageIds.insert(stoi(messages[i]["id"]));
+            }
+        }
+
+        cout << endl << "Messages's id : " << endl;
+        cin >> messageToOpen;
+
+        if(cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        else
+        {
+            correctId = messageIds.find(messageToOpen) != messageIds.end();
+        }
+
+        if (!correctId)
+        {
+            cout << "Identifiant inconnu ..." << endl;
+        }
+
+    } while(!correctId);
+
+    Contact *m = new Contact(messageToOpen);
+    cout << *m <<endl;
+
+}
 void Advisor::ValidateLoan() {
 
 }

@@ -21,6 +21,7 @@ public:
     bool isAdivsor();
     void ValidateLoan();
     void getUserBankAccounts();
+    void ConsultMessages();
     void CreateBankAccount();
     Client* getUsers();
     void TransferMoneyUser();

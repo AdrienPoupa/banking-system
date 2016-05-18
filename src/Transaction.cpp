@@ -101,7 +101,7 @@ istream& operator>> (std::istream& stream, Transaction& transaction)
     cout << "Bank account ID: " << endl;
     int accountID;
     stream >> accountID;
-    transaction._account = new BankAccount(accountID);
+    transaction._account = * new BankAccount(accountID);
     cout << "Date: " << endl;
     stream >> transaction._date;
     cout << "Amount: " << endl;
