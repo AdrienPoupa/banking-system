@@ -57,7 +57,7 @@ Advisor::Advisor(const std::string lastName, const std::string firstName, const 
 }
 
 void Advisor::getUserBankAccounts() {
-    map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname, isadmin");
+    map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname, isadmin, isadvisor");
 
     int totalUsers = (int)users.size();
 
@@ -77,13 +77,14 @@ void Advisor::getUserBankAccounts() {
                 space += " ";
             }
 
-            if (users[i]["isadmin"] == "1")
-            {
+            if (users[i]["isadmin"] == "1") {
                 star = "* ";
             }
-            if(users[i]["isadmin"] != "1" && users[i]["isadvisor"] != "1")
-            cout << space << users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] << endl;
-            userIds.insert(stoi(users[i]["id"]));
+            if(users[i]["isadmin"] != "1" && users[i]["isadvisor"] != "1") {
+                cout << space << users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] <<
+                endl;
+                userIds.insert(stoi(users[i]["id"]));
+            }
         }
 
         cout << endl << "Client's id : " << endl;

@@ -236,7 +236,6 @@ int Bank::displayMenu()
 
 void Bank::redirectChoice(const int choice)
 {
-    cout<< _currentUser.isAdvisor()<<endl;
     switch (choice)
     {
         // User action
@@ -248,7 +247,7 @@ void Bank::redirectChoice(const int choice)
                     Advisor advisor= Advisor(_currentUser.getId());
                     advisor.getUserBankAccounts();
                  }
-            else if(_currentUser.isAdvisor()){
+            else if(!_currentUser.isAdvisor() && !_currentUser.isAdmin()){
                     Client client= Client(_currentUser.getId());
                     client.getBankAccounts();
                 }

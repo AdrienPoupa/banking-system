@@ -52,10 +52,6 @@ void Client::getBankAccounts() {
     set<int> AccountIds = set<int>();
     bool correctId = false;
 
-    for(int i=0; i < totalAccount; i++){
-        cout << getLastName() << " "<< bankAccount[i]["SWIFT"]<<endl;
-    }
-
     do{
         string swiftspace;
         string bicSpace;
