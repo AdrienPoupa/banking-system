@@ -32,6 +32,7 @@ Client::Client(const unsigned int id) // Get a Client from an ID provided by DB
         _isAdmin = stoi(data["isadmin"]);
         _isAdvisor = stoi(data["isadvisor"]);
         _password = data["password"];
+        _idAdvisor = stoi(data["id_advisor"]);
     }
     else
     {
@@ -126,10 +127,21 @@ Client::Client(const std::string lastName, const std::string firstName, const Da
 
 }
 
-void Client::ContactAdvisor() {
-
+void Client::contactAdvisor() {
+    string message;
+    Advisor *advisor = new Advisor(this->_idAdvisor);
+    cout << "You are going to send a message to: " << advisor->getLastName() << " " << advisor->getFirstName() << endl;
+    cout << "Enter the message you want to send." << endl;
+    cin >> message;
+    if(message !=""){
+        Contact* contact = new Contact(this->_id, this->_idAdvisor, message);
+        contact->save();
+        cout << "Your message has been sent"<<endl;
+    }
+    else{
+        cout << "You cannot send an empty message." << endl;
+    }
 }
-
 void Client::LoanApplication() {
 
 }

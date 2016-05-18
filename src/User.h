@@ -15,6 +15,7 @@ protected:
     std::string _phone;
     int _isAdmin = 0;
     int _isAdvisor = 0;
+    int _idAdvisor;
     std::string _password;
 
     static std::string _dbTable;
@@ -65,7 +66,7 @@ public:
     void shortDisplay() const;
 
     bool isAdvisor() const;
-
+    
     friend std::ostream& operator<< (std::ostream& stream, const User& user);
     friend std::istream& operator>> (std::istream& stream, User& user);
 };

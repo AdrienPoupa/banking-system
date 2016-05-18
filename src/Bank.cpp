@@ -262,10 +262,18 @@ void Bank::redirectChoice(const int choice)
                      client.Transfer();
                  }
                  break;
-            /*
+
              case 3:
-                 getListEntity<Cd>();
+                 if(_currentUser.isAdvisor()){
+                     Advisor advisor= Advisor(_currentUser.getId());
+                     advisor.TransferMoneyUser();
+                 }
+                 else if(!_currentUser.isAdvisor() && !_currentUser.isAdmin()){
+                     Client client= Client(_currentUser.getId());
+                     client.contactAdvisor();
+                 }
                  break;
+            /*
              case 4:
                  getListEntity<Artist>();
                  break;

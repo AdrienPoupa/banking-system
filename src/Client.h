@@ -7,6 +7,8 @@
 #define _CLIENT_H
 
 #include "User.h"
+#include "Advisor.h"
+#include "Contact.h"
 #include "BankAccount.h"
 class BankAccount;
 
@@ -19,7 +21,7 @@ public:
     Client(const std::string lastName, const std::string firstName, const Date birthDate);
 
     BankAccount* getBankAccounts();
-    void ContactAdvisor();
+    void contactAdvisor();
     void Transfer();
     void LoanApplication();
 };

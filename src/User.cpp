@@ -299,7 +299,8 @@ bool User::save()
         {"town", {_address.getTown(), "string"}},
         {"street", {_address.getStreetName(), "string"}},
         {"isadmin", {to_string(_isAdmin), "int"}},
-        {"password", {_password, "string"}}
+        {"password", {_password, "string"}},
+        {"id_advisor", {to_string(_idAdvisor), "int"}}
     });
     if (_id == 0)
     {

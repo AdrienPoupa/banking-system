@@ -9,7 +9,7 @@
 #include "User.h"
 #include "Administrator.h"
 #include "Client.h"
-
+class Client;
 class Advisor: public User {
 
 public:
