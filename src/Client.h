@@ -21,7 +21,6 @@ public:
     BankAccount* getBankAccounts();
     void ContactAdvisor();
     void Transfer();
-
     void LoanApplication();
 };
 

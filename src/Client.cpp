@@ -100,15 +100,22 @@ Client::Client(const std::string lastName, const std::string firstName, const st
 
 void Client::Transfer(){
     int amountToTransfer;
-    BankAccount* bc = getBankAccounts();
+    BankAccount* bcIncome = getBankAccounts();
     cout << endl << "Amount to transfer : " << endl;
     cin >> amountToTransfer;
 
-    if(bc->getBalance() < amountToTransfer){
+    if(bcIncome->ConsultAmount()< amountToTransfer){
         cout << "Insufficient amount" << endl;
     }
     else{
-
+        BankAccount* bcToTransfer = getBankAccounts();
+        if(bcToTransfer->getId() != bcIncome->getId()) {
+            bcIncome->Transfer(amountToTransfer, bcToTransfer);
+            cout << *bcIncome << endl;
+        }
+        else{
+            cout << "The two accounts must be different"<<endl;
+        }
     }
 }
 
@@ -118,7 +125,6 @@ Client::Client(const std::string lastName, const std::string firstName, const Da
     _birthDate = birthDate;
 
 }
-
 
 void Client::ContactAdvisor() {
 

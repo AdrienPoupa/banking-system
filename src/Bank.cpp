@@ -192,7 +192,7 @@ int Bank::displayMenu()
         cout << "#                            #" << endl;
         cout << "#  -- Main menu --           #" << endl;
         cout << "#  1. Consult bank account   #" << endl;
-        cout << "#  2. Liste des dvds         #" << endl;
+        cout << "#  2. Transfer               #" << endl;
         cout << "#  3. Liste des cds          #" << endl;
         cout << "#  4. Liste des artistes     #" << endl;
         cout << "#  5. Mes emprunts           #" << endl;
@@ -251,10 +251,18 @@ void Bank::redirectChoice(const int choice)
                     client.getBankAccounts();
                 }
                  break;
-            /*
+
              case 2:
-                 getListEntity<Dvd>();
+                 if(_currentUser.isAdvisor()){
+                     Advisor advisor= Advisor(_currentUser.getId());
+                     advisor.TransferMoneyUser();
+                 }
+                 else if(!_currentUser.isAdvisor() && !_currentUser.isAdmin()){
+                     Client client= Client(_currentUser.getId());
+                     client.Transfer();
+                 }
                  break;
+            /*
              case 3:
                  getListEntity<Cd>();
                  break;

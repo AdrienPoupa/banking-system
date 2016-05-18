@@ -55,8 +55,7 @@ Advisor::Advisor(const std::string lastName, const std::string firstName, const 
     _birthDate = birthDate;
 
 }
-
-void Advisor::getUserBankAccounts() {
+Client* Advisor::getUsers(){
     map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname, isadmin, isadvisor");
 
     int totalUsers = (int)users.size();
@@ -108,7 +107,17 @@ void Advisor::getUserBankAccounts() {
     } while(!correctId);
 
     Client *client = new Client(idToOpen);
+    return client;
+}
+
+void Advisor::getUserBankAccounts() {
+    Client *client = getUsers();
     client->getBankAccounts();
+}
+
+void Advisor::TransferMoneyUser(){
+    Client *client = getUsers();
+    client->Transfer();
 }
 
 void Advisor::ValidateLoan() {
