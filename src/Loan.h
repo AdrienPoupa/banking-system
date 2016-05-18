@@ -15,10 +15,12 @@ protected:
     Date _creation;
     Date _validation;
     User _sender;
-public:
-    Loan(const Date creation, const Date validation, const User sender);
+    bool _approved;
 
-    // todo: Loan from ID
+    static std::string _dbTable;
+public:
+    Loan(const Date creation, const Date validation, const User sender, const bool approved);
+    Loan (const unsigned int id);
 
     unsigned int getId() const;
 
@@ -28,11 +30,15 @@ public:
     void setValidation(Date validation);
     Date getValidation();
 
+    bool getApproved();
+
     void validate();
 
     void decline();
 
-    // todo: DB
+    bool save();
+
+    bool remove();
 };
 
 #endif //_LOAN_H

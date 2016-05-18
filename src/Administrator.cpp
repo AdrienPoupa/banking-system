@@ -32,7 +32,7 @@ Administrator::Administrator(const unsigned int id) // Get a Administrator from 
     }
     else
     {
-        throw invalid_argument("Merci d'entrer un utilisateur valide");
+        throw invalid_argument("Please enter a valid ID");
     }
 }
 /*

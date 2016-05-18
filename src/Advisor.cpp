@@ -34,7 +34,7 @@ Advisor::Advisor(const unsigned int id) // Get a Advisor from an ID provided by 
     }
     else
     {
-        throw invalid_argument("Merci d'entrer un utilisateur valide");
+        throw invalid_argument("Please enter a valid ID");
     }
 }
 /*

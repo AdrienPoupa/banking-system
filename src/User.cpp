@@ -1,7 +1,6 @@
 #include <thread>
 #include <iostream>
 #include "User.h"
-#include "Address.h"
 #include "BaseModel.h"
 #include "sha256.h"
 
@@ -158,21 +157,21 @@ void User::setBirthDate(const Date birthDate)
 }
 
 void User::editFirstname(){
-    cout << "Saisir nouveau prenom : " << endl;
+    cout << "Enter new firstname: " << endl;
     string newName;
     cin.ignore(1, '\n');
     getline(cin, newName, '\n');
     setFirstName(newName);
 }
 void User::editLastname(){
-    cout << "Saisir nouveau nom : " << endl;
+    cout << "Enter new last name: " << endl;
     string newLastName;
     cin.ignore(1, '\n');
     getline(cin, newLastName, '\n');
     setLastName(newLastName);
 }
 void User::editBirthdate(){
-    cout << "Saisir nouvelle date de naissance : " << endl;
+    cout << "Enter new birthdate: " << endl;
     Date newBirthDate;
     cin >> newBirthDate;
     setBirthDate(newBirthDate);
@@ -184,19 +183,19 @@ void User::edit()
     bool failInput = false;
     do {
         cout << "-------------------------------------" << endl;
-        cout << " -- Modification d'un utilisateur -- " << endl;
+        cout << " -- Edit a user -- " << endl;
 
-        cout << "1. Modifier le prenom" << endl;
-        cout << "2. Modifier le nom" << endl;
-        cout << "3. Modifier le telephone" << endl;
-        cout << "4. Modifier la date de naissance" << endl;
-        cout << "5. Modifier l'adresse" << endl;
-        cout << "6. Modifier le type de compte" << endl;
-        cout << "8. Modifier le mot de passe" << endl;
-        cout << "9. Supprimer l'utilisateur" << endl;
-        cout << "0. Annuler" << endl;
+        cout << "1. Edit first name" << endl;
+        cout << "2. Edit last name" << endl;
+        cout << "3. Edit phone number" << endl;
+        cout << "4. Edit birthdate" << endl;
+        cout << "5. Edit address" << endl;
+        cout << "6. Edit permissions" << endl;
+        cout << "8. Edit password" << endl;
+        cout << "9. Delete user" << endl;
+        cout << "0. Cancel" << endl;
 
-        cout << "Choix: " << endl;
+        cout << "Choice: " << endl;
         cin >> choice;
         if(cin.fail()){
             failInput = true;
@@ -219,7 +218,7 @@ void User::edit()
         }
         case 3:
         {
-            cout << "Saisir nouveau numero de telephone : " << endl;
+            cout << "Enter new phone : " << endl;
             string newPhone;
             cin.ignore(1, '\n');
             getline(cin, newPhone, '\n');
@@ -233,7 +232,7 @@ void User::edit()
         }
         case 5:
         {
-            cout << "Saisir nouvelle adresse : " << endl;
+            cout << "Enter new address : " << endl;
             Address newAddress;
             cin >> newAddress;
             setAddress(newAddress);
@@ -245,7 +244,8 @@ void User::edit()
             bool failInput;
             do {
                 failInput = false;
-                cout << "Tapez 0 pour un utilisateur lambda, 1 pour un administrateur : " << endl;
+                // todo: update
+                cout << "Type 0 for a regular user, 1 for an admin : " << endl;
                 cin >> newIsAdmin;
                 if(cin.fail()){
                     failInput = true;
@@ -258,7 +258,7 @@ void User::edit()
         }
         case 8:
         {
-            cout << "Saisir nouveau mot de passe : " << endl;
+            cout << "Enter new password: " << endl;
             string newPassword;
             cin.ignore(1, '\n');
             getline(cin, newPassword, '\n');
@@ -268,7 +268,7 @@ void User::edit()
         case 9:
         {
             remove();
-            throw invalid_argument("Vous venez de vous supprimer");
+            throw invalid_argument("You just deleted yourself");
             break;
         }
         default:
@@ -278,7 +278,7 @@ void User::edit()
 
     if (choice != 9 && choice != 0 )
     {
-        cout << "Sauvegarde..." << endl;
+        cout << "Saving..." << endl;
         save();
     }
 
@@ -287,7 +287,6 @@ void User::edit()
 
 bool User::save()
 {
-    cout << _password<< endl;
     int res = BaseModel::save(_dbTable, {
         {"id", {to_string(_id), "int"}},
         {"name", {_firstName, "string"}},
@@ -321,18 +320,18 @@ void User::shortDisplay() const
 
 ostream& operator<< (ostream& stream, const User& user)
 {
-    string isAdmin = "Non";
+    string isAdmin = "No";
 
     if (user._isAdmin == true)
     {
-        isAdmin = "Oui";
+        isAdmin = "Yes";
     }
 
     stream << user._id << ". " << user._firstName << " " << user._lastName << endl;
-    stream << "Anniversaire: " << user._birthDate << endl;
-    stream << "Telephone: " << user._phone << endl;
-    stream << "Adresse: " << user._address << endl;
-    stream << "Est admin: " << isAdmin << endl;
+    stream << "Birthdate: " << user._birthDate << endl;
+    stream << "Phone: " << user._phone << endl;
+    stream << "Adress: " << user._address << endl;
+    stream << "Is admin: " << isAdmin << endl;
 
     return stream;
 }
@@ -341,30 +340,30 @@ istream& operator>> (istream& stream, User& user)
 {
     string passwordTmp;
 
-    cout << "Saisie d'un utilisateur" << endl;
+    cout << "New user" << endl;
 
-    cout << "Saisie du prenom : " << endl;
+    cout << "First name: " << endl;
     stream.ignore(1, '\n');
     getline(stream, user._firstName, '\n');
 
-    cout << "Saisie du nom : " << endl;
+    cout << "Last name: " << endl;
     getline(stream, user._lastName, '\n');
 
-    cout << "Saisie de l'anniversaire : " << endl;
+    cout << "Birthdate: " << endl;
     stream >> user._birthDate;
 
-    cout << "Saisie du telephone : " << endl;
+    cout << "Phone: " << endl;
     stream.ignore(1, '\n');
     getline(stream, user._phone, '\n');
 
-    cout << "Saisie de l'adresse : " << endl;
+    cout << "Address: " << endl;
     stream >> user._address;
 
-    cout << "Saisie du mot de passe : " << endl;
+    cout << "Password: " << endl;
     stream.ignore(1, '\n');
     getline(stream, passwordTmp, '\n');
 
-    cout << "Tapez 1 si l'utilisateur est administrateur, 0 sinon : " << endl;
+    cout << "Type 0 for a regular user, 1 for an admin:" << endl;
     bool a;
     bool failInput;
     do {

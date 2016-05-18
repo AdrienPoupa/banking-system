@@ -59,25 +59,25 @@ void Address::setStreetName(const string& streetName)
     _streetName = streetName;
 }
 
-ostream& operator<< (ostream& stream, const Address& adresse)
+ostream& operator<< (ostream& stream, const Address& address)
 {
-    stream << adresse._houseNumber << " " << adresse._streetName << ", " << adresse._postalCode << " " << adresse._town << ", " << adresse._country;
+    stream << address._houseNumber << " " << address._streetName << ", " << address._postalCode << " " << address._town << ", " << address._country;
     return stream;
 }
 
-istream& operator>> (std::istream& stream, Address& adresse)
+istream& operator>> (std::istream& stream, Address& address)
 {
-    cout << "Numero de rue : " << endl;
-    stream >> adresse._houseNumber;
-    cout << "Rue : " << endl;
+    cout << "Street number: " << endl;
+    stream >> address._houseNumber;
+    cout << "Street: " << endl;
     stream.ignore(1, '\n');
-    getline(stream, adresse._streetName, '\n');
-    cout << "Code postal : " << endl;
-    getline(stream, adresse._postalCode, '\n');
-    cout <<"Ville : " << endl;
-    getline(stream, adresse._town, '\n');
-    cout << "Pays : " << endl;
-    getline(stream, adresse._country, '\n');
+    getline(stream, address._streetName, '\n');
+    cout << "Postal code: " << endl;
+    getline(stream, address._postalCode, '\n');
+    cout << "Town: " << endl;
+    getline(stream, address._town, '\n');
+    cout << "Country: " << endl;
+    getline(stream, address._country, '\n');
 
     return stream;
 

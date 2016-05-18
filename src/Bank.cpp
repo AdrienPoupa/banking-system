@@ -16,7 +16,7 @@ Bank* Bank::getSingleton()
 {
     if (singleton == NULL)
     {
-        // check if mediatheque.db3 exist
+        // check if bank.db3 exist
         ifstream mfile("bank.db3");
         if (mfile)
         {
@@ -69,10 +69,9 @@ void Bank::run()
 
     if (!connected)
     {
-        cout << "L'authentification a echoue." << endl;
+        cout << "Authentication failed." << endl;
         return;
     }
-    // boucle tant que l'utilisateur ne quitte pas le programme
     bool quit = false;
 
     while(!quit)
@@ -84,7 +83,7 @@ void Bank::run()
             quit = true;
     }
 
-    cout << "A bientot !" << endl;
+    cout << "See you soon!" << endl;
 }
 
 bool Bank::connect()
@@ -99,11 +98,11 @@ bool Bank::connect()
     bool correctPass = false;
     do{
         cout << "-------------------------------------------------------" << endl;
-        cout << " -- Account list for connexion--" << endl;
+        cout << " -- Account list for connection--" << endl;
         cout << " -- * -> Advisor --" << endl;
         cout << " -- ** -> Admin --" << endl;
-        cout << " Identifiant | Prenom Nom " << endl;
-        cout << "-------------|-------------------" << endl;
+        cout << "     ID      | Last name First name " << endl;
+        cout << "-------------|---------------------" << endl;
         for (int i = 1; i != totalUsers + 1; i++)
         {
             string space, star = "";
@@ -123,7 +122,7 @@ bool Bank::connect()
             userIds.insert(stoi(users[i]["id"]));
         }
 
-        cout << endl << "Identifiant de connexion : " << endl;
+        cout << endl << "ID : " << endl;
         cin >> idToOpen;
 
         if(cin.fail())
@@ -138,7 +137,7 @@ bool Bank::connect()
 
         if (!correctId)
         {
-            cout << "Identifiant inconnu ..." << endl;
+            cout << "Unknown ID ..." << endl;
         }
 
     } while(!correctId);
@@ -160,7 +159,7 @@ bool Bank::connect()
     int essai = 3;
     while(!correctPass && essai > 0)
     {
-        cout << "Mot de passe de connexion : " << endl;
+        cout << "Password: " << endl;
         string inputPassword;
         cin >> inputPassword;
         if (sha256(inputPassword) == _currentUser.getPassword())
@@ -172,11 +171,11 @@ bool Bank::connect()
 
         if (correctPass)
         {
-            cout << "Identification reussie ! " << endl << endl;
+            cout << "Authentication successful ! " << endl << endl;
         }
         else
         {
-            cout << "Erreur dans votre mot de passe." << endl;
+            cout << "Wrong password" << endl;
         }
     }
     return correctPass;
@@ -191,7 +190,7 @@ int Bank::displayMenu()
         cout << endl;
         cout << "##############################" << endl;
         cout << "#                            #" << endl;
-        cout << "#  -- Menu principal --      #" << endl;
+        cout << "#  -- Main menu --           #" << endl;
         cout << "#  1. Consult bank account   #" << endl;
         cout << "#  2. Liste des dvds         #" << endl;
         cout << "#  3. Liste des cds          #" << endl;
@@ -218,10 +217,10 @@ int Bank::displayMenu()
         }
 
         cout << "#  -----------------------   #" << endl;
-        cout << "#  0. Annuler                #" << endl;
+        cout << "#  0. Cancel                 #" << endl;
         cout << "##############################" << endl;
 
-        cout << "\tChoix: " << endl;
+        cout << "\tChoice: " << endl;
         cin >> choice;
         if(cin.fail()){
             failInput = true;
