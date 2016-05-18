@@ -55,9 +55,8 @@ Advisor::Advisor(const std::string lastName, const std::string firstName, const 
     _birthDate = birthDate;
 
 }
-
-void Advisor::getUserBankAccounts() {
-    map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname, isadmin");
+Client* Advisor::getUsers(){
+    map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname, isadmin, isadvisor");
 
     int totalUsers = (int)users.size();
 
@@ -77,13 +76,14 @@ void Advisor::getUserBankAccounts() {
                 space += " ";
             }
 
-            if (users[i]["isadmin"] == "1")
-            {
+            if (users[i]["isadmin"] == "1") {
                 star = "* ";
             }
-            if(users[i]["isadmin"] != "1" && users[i]["isadvisor"] != "1")
-            cout << space << users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] << endl;
-            userIds.insert(stoi(users[i]["id"]));
+            if(users[i]["isadmin"] != "1" && users[i]["isadvisor"] != "1") {
+                cout << space << users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] <<
+                endl;
+                userIds.insert(stoi(users[i]["id"]));
+            }
         }
 
         cout << endl << "Client's id : " << endl;
@@ -107,7 +107,17 @@ void Advisor::getUserBankAccounts() {
     } while(!correctId);
 
     Client *client = new Client(idToOpen);
+    return client;
+}
+
+void Advisor::getUserBankAccounts() {
+    Client *client = getUsers();
     client->getBankAccounts();
+}
+
+void Advisor::TransferMoneyUser(){
+    Client *client = getUsers();
+    client->Transfer();
 }
 
 void Advisor::ValidateLoan() {

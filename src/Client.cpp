@@ -43,7 +43,7 @@ Client::~Client()
 {
 
 }*/
-void Client::getBankAccounts() {
+BankAccount* Client::getBankAccounts() {
     map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id, swift, BIC,id_user,balance");
 
     int totalAccount = (int)bankAccount.size();
@@ -51,10 +51,6 @@ void Client::getBankAccounts() {
     int idToOpen;
     set<int> AccountIds = set<int>();
     bool correctId = false;
-
-    for(int i=0; i < totalAccount; i++){
-        cout << getLastName() << " "<< bankAccount[i]["SWIFT"]<<endl;
-    }
 
     do{
         string swiftspace;
@@ -94,11 +90,33 @@ void Client::getBankAccounts() {
     } while(!correctId);
     BankAccount *bc = new BankAccount(idToOpen);
     cout << *bc<<endl;
+    return bc;
 }
 Client::Client(const std::string lastName, const std::string firstName, const std::string password) {
     _lastName = lastName;
     _firstName = firstName;
     _password = sha256(password);
+}
+
+void Client::Transfer(){
+    int amountToTransfer;
+    BankAccount* bcIncome = getBankAccounts();
+    cout << endl << "Amount to transfer : " << endl;
+    cin >> amountToTransfer;
+
+    if(bcIncome->ConsultAmount()< amountToTransfer){
+        cout << "Insufficient amount" << endl;
+    }
+    else{
+        BankAccount* bcToTransfer = getBankAccounts();
+        if(bcToTransfer->getId() != bcIncome->getId()) {
+            bcIncome->Transfer(amountToTransfer, bcToTransfer);
+            cout << *bcIncome << endl;
+        }
+        else{
+            cout << "The two accounts must be different"<<endl;
+        }
+    }
 }
 
 Client::Client(const std::string lastName, const std::string firstName, const Date birthDate){
@@ -107,7 +125,6 @@ Client::Client(const std::string lastName, const std::string firstName, const Da
     _birthDate = birthDate;
 
 }
-
 
 void Client::ContactAdvisor() {
 

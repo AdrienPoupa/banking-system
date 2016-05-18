@@ -22,7 +22,8 @@ public:
     void ValidateLoan();
     void getUserBankAccounts();
     void CreateBankAccount();
-
+    Client* getUsers();
+    void TransferMoneyUser();
     void CloseBankAccount();
 
     void CreateClientAccount();

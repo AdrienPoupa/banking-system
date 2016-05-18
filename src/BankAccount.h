@@ -34,11 +34,10 @@ public:
     std::string getBic() const;
     void setSwift(std::string swift);
     std::string getSwift() const;
-    int getBalance() const;
-
-    void ConsultAmount();
+    bool save();
+    int ConsultAmount();
     
-    void Transfer();
+    void Transfer(int amount, BankAccount* bc);
     
     void ConsultHistory();
     

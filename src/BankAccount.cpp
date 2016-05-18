@@ -65,8 +65,8 @@ BankAccount::BankAccount(const int id) // Get a User from an ID provided by DB
 
     if (!data.empty()) {
         _id = id;
-        _swift = data["swift"];
-        _bic = data["bic"];
+        _swift = data["SWIFT"];
+        _bic = data["BIC"];
         _balance = stoi(data["balance"]);
         _idUser = stoi(data["id_user"]);
     }
@@ -75,12 +75,29 @@ BankAccount::BankAccount(const int id) // Get a User from an ID provided by DB
     }
 }
 
-void BankAccount::ConsultAmount() {
-
+int BankAccount::ConsultAmount() {
+    return this->_balance;
 }
+bool BankAccount::save(){
+        int res = BaseModel::save(_dbTable, {
+                {"id", {to_string(_id), "int"}},
+                {"SWIFT", {_swift,"string"}},
+                {"BIC", {_bic, "string"}},
+                {"balance", {to_string(_balance), "int"}},
+                {"id_user", {to_string(_idUser), "int"}},
+        });
+        if (_id == 0)
+        {
+            _id = res["id"];
+        }
 
-void BankAccount::Transfer() {
-
+        return (bool) res;
+}
+void BankAccount::Transfer(int amount, BankAccount* bc) {
+    this->_balance -= amount;
+    this->save();
+    bc->_balance += amount;
+    bc->save();
 }
 
 void BankAccount::ConsultHistory() {
@@ -92,10 +109,6 @@ void BankAccount::RequestSwift() {
     cout << "Bic:" << getBic() << endl;
 }
 
-
-int BankAccount::getBalance() const{
-    return this->_balance;
-}
 
 ostream& operator<< (ostream& stream, const BankAccount& bankAccount)
 {
