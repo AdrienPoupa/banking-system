@@ -13,7 +13,9 @@ string BankAccount::_dbTable = "bank_account";
 
 BankAccount::BankAccount(unsigned int user_id, const string swift, const string bic) :_idUser(user_id),
                                                                                          _swift(swift),
-                                                                                         _bic(bic) { }
+                                                                                         _bic(bic) {
+    _id = 0;
+}
 
 unsigned int BankAccount::getId() const{
     return _id;
@@ -44,7 +46,7 @@ std::string BankAccount::getSwift() const {
 }
 
 BankAccount::BankAccount(){
-
+    _id = 0;
 }
 
 BankAccount::BankAccount(std::string swift, std::string bic, int idUser){
@@ -56,7 +58,7 @@ BankAccount::BankAccount(std::string swift, std::string bic, int idUser){
     catch (exception e){
         cout << e.what()<<endl;
     }
-    _idUser=idUser;
+    _idUser = idUser;
 }
 
 BankAccount::BankAccount(const int id) // Get a User from an ID provided by DB
@@ -93,6 +95,7 @@ bool BankAccount::save(){
 
         return (bool) res;
 }
+
 void BankAccount::Transfer(int amount, BankAccount* bc) {
     this->_balance -= amount;
     this->save();
@@ -104,6 +107,25 @@ void BankAccount::ConsultHistory() {
 
 }
 
+void BankAccount::decreaseAmount(int less) {
+    _balance -= less;
+}
+
+set<int> BankAccount::getExpenses() {
+    map<int, map<string, string>> expenses = BaseModel::select("transactions", "id", "account = " + to_string(getId()));
+
+    int totalExpenses = (int)expenses.size();
+
+    set<int> ExpensesId = set<int>();
+
+    for (int i = 1; i != totalExpenses + 1; i++)
+    {
+        ExpensesId.insert(stoi(expenses[i]["id"]));
+    }
+
+    return ExpensesId;
+}
+
 void BankAccount::RequestSwift() {
     cout << "Swift:" << getSwift() << endl;
     cout << "Bic:" << getBic() << endl;
@@ -113,7 +135,7 @@ void BankAccount::RequestSwift() {
 ostream& operator<< (ostream& stream, const BankAccount& bankAccount)
 {
     User* user = new Client(bankAccount._idUser);
-    stream << "Bank account n°: "<< bankAccount.getId()<<endl;
+    stream << "Bank account number: "<< bankAccount.getId()<<endl;
     stream << "Owner: " << user->getFirstName() << " " << user->getLastName() << endl;
     stream << "Balance: " << bankAccount._balance << endl;
 

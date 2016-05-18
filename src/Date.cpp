@@ -215,7 +215,7 @@ istream& operator>> (istream& stream, Date& date)
     }while(date._day < -1 && date._day > 31 && date._day == 0);
     
     do {
-        cout << "Enter month (de 1 a 12, -1 if unknown) : " << endl;
+        cout << "Enter month (1 to 12, -1 if unknown) : " << endl;
         stream >> date._month;
     }while(date._month < -1 && date._month > 12 && date._month == 0);
     

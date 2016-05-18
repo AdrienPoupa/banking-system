@@ -18,7 +18,9 @@ string Loan::_dbTable = "loans";
 Loan::Loan(const Date creation, const Date validation, const User sender, const bool approved) : _creation(creation),
                                                                                                  _validation(validation),
                                                                                                 _sender(sender),
-                                                                                                _approved(approved){ }
+                                                                                                _approved(approved){
+    _id = 0;
+}
 
 Loan::Loan(const unsigned int id) {
     map<string, string> data = BaseModel::getById(_dbTable, id);

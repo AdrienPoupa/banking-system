@@ -18,7 +18,9 @@ string Order::_dbTable = "orders";
 Order::Order(const Date creation, const Date sent, int type, Client user) : _creation(creation),
                                                                                _sent(sent),
                                                                                 _type(type),
-                                                                               _user(user) { }
+                                                                               _user(user) {
+    _id = 0;
+}
 
 Order::Order(const unsigned int id) {
     map<string, string> data = BaseModel::getById(_dbTable, id);

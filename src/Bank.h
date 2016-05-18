@@ -35,6 +35,7 @@ class Bank {
         Bank();
 
         bool isAdmin();
+        bool isAdvisor();
 
         bool connect();
 

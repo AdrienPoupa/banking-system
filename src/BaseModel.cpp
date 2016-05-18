@@ -41,8 +41,6 @@ map<int, map<string, string>> BaseModel::select(const string& table, const strin
     {
         SQLite::Database db("bank.db3");
 
-        //cout << "SELECT " + fields + " FROM " + table + (where.length() != 0 ? " WHERE " + where : "") << endl;
-
         SQLite::Statement query(db, "SELECT " + fields + " FROM " + table + (where.length() != 0 ? " WHERE " + where : ""));
 
         int resultCount = 0;
@@ -129,7 +127,7 @@ int BaseModel::save(const string& table, map<string, vector<string>> data)
         }
     }
 
-        // Insert
+    // Insert
     else
     {
         try

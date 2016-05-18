@@ -29,13 +29,20 @@ public:
 
     void setUserId(unsigned int user_id);
     unsigned int getUserId() const;
+
     unsigned int getId() const;
     void setBic(std::string bic);
+
     std::string getBic() const;
     void setSwift(std::string swift);
+
     std::string getSwift() const;
     bool save();
+
     int ConsultAmount();
+    void decreaseAmount(int less);
+
+    std::set<int> getExpenses();
     
     void Transfer(int amount, BankAccount* bc);
     

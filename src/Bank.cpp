@@ -1,4 +1,5 @@
 #include "Bank.h"
+#include "Transaction.h"
 
 using namespace std;
 
@@ -59,6 +60,11 @@ bool Bank::isAdmin()
     return _currentUser.isAdmin();
 }
 
+bool Bank::isAdvisor()
+{
+    return _currentUser.isAdvisor();
+}
+
 void Bank::run()
 {
     cout << endl << "Loading... (2 sec)" << endl;
@@ -92,7 +98,7 @@ bool Bank::connect()
 
     int totalUsers = (int)users.size();
 
-    int idToOpen;
+    unsigned int idToOpen;
     set<int> userIds = set<int>();
     bool correctId = false;
     bool correctPass = false;
@@ -107,9 +113,20 @@ bool Bank::connect()
         {
             string space, star = "";
 
-            for(unsigned int i = 0; i < (11 - users[i]["id"].length()); i++){
+            int spaceNumber;
+
+            if (stoi(users[i]["id"]) < 10) {
+                spaceNumber = 11;
+
+            }
+            else {
+                spaceNumber = 10;
+            }
+
+            for(unsigned int i = 0; i < (spaceNumber - users[i]["id"].length()); i++){
                 space += " ";
             }
+
             if (users[i]["isadmin"] == "1")
             {
                 star = "**";
@@ -118,7 +135,7 @@ bool Bank::connect()
                 star = "*";
             }
 
-            cout << space<< users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] << endl;
+            cout << space << users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] << endl;
             userIds.insert(stoi(users[i]["id"]));
         }
 
@@ -141,18 +158,18 @@ bool Bank::connect()
         }
 
     } while(!correctId);
-    //User accountToOpen;
+
     if(stoi(users[correctId]["isadvisor"]) == 1){
         Advisor accountToOpen(idToOpen);
-        _currentUser=accountToOpen;
+        _currentUser = accountToOpen;
     }
     else if(stoi(users[correctId]["isadmin"]) == 1){
         Administrator accountToOpen(idToOpen);
-        _currentUser=accountToOpen;
+        _currentUser = accountToOpen;
     }
     else{
         Client accountToOpen(idToOpen);
-        _currentUser=accountToOpen;
+        _currentUser = accountToOpen;
     }
 
 
@@ -162,16 +179,12 @@ bool Bank::connect()
         cout << "Password: " << endl;
         string inputPassword;
         cin >> inputPassword;
-        if (sha256(inputPassword) == _currentUser.getPassword())
-        {
-            correctPass = true;
-        }
-        _currentUser.checkPassword(inputPassword);
+        correctPass = _currentUser.checkPassword(inputPassword);
         essai--;
 
         if (correctPass)
         {
-            cout << "Authentication successful ! " << endl << endl;
+            cout << "Authentication successful! " << endl << endl;
         }
         else
         {
@@ -193,27 +206,30 @@ int Bank::displayMenu()
         cout << "#  -- Main menu --           #" << endl;
         cout << "#  1. Consult bank account   #" << endl;
         cout << "#  2. Transfer               #" << endl;
-        cout << "#  3. Liste des cds          #" << endl;
-        cout << "#  4. Liste des artistes     #" << endl;
-        cout << "#  5. Mes emprunts           #" << endl;
-        cout << "#  6. Chercher un article    #" << endl;
+        cout << "#  3. Change password        #" << endl;
 
         if (isAdmin())
         {
             cout << "#                            #" << endl;
-            cout << "# -- Menu Administrateur --  #" << endl;
-            cout << "#  7. Liste des utilisateurs #" << endl;
-            cout << "#  8. Liste des genres       #" << endl;
-            cout << "#  9. Liste des statuts      #" << endl;
-            cout << "# 10. Liste des emprunts     #" << endl;
-            cout << "# 11. Ajouter un utilisateur #" << endl;
-            cout << "# 12. Ajouter un livre       #" << endl;
-            cout << "# 13. Ajouter un cd          #" << endl;
-            cout << "# 14. Ajouter un dvd         #" << endl;
-            cout << "# 15. Ajouter un artiste     #" << endl;
-            cout << "# 16. Ajouter un genre       #" << endl;
-            cout << "# 17. Ajouter un statuts     #" << endl;
-            cout << "# 18. Ajouter un emprunt     #" << endl;
+            cout << "# ------- Admin Menu ------- #" << endl;
+            cout << "#  10. ...                   #" << endl;
+        }
+        else if (isAdvisor())
+        {
+            cout << "#                            #" << endl;
+            cout << "# ------ Advisor Menu ------ #" << endl;
+            cout << "#  8. Add a transaction      #" << endl;
+            cout << "#  9. Liste des utilisateurs #" << endl;
+        }
+        else
+        {
+            cout << "#                            #" << endl;
+            cout << "# ------ Client Menu ------- #" << endl;
+            cout << "#  4. Contact advisor        #" << endl;
+            cout << "#  5. Expense history        #" << endl;
+            cout << "#  6. Order a checkbook      #" << endl;
+            cout << "#  7. Order a credit card    #" << endl;
+            cout << "#  8. Add a transaction     #" << endl;
         }
 
         cout << "#  -----------------------   #" << endl;
@@ -228,7 +244,8 @@ int Bank::displayMenu()
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
 
-    } while(failInput || choice < 0 || (!isAdmin() && choice > 6) || choice > 18);
+    //} while(failInput || choice < 0 || (!isAdmin() && choice > 6) || choice > 18); todo: permissions
+    } while(failInput || choice < 0);
 
     return choice;
 }
@@ -237,91 +254,101 @@ void Bank::redirectChoice(const int choice)
 {
     switch (choice)
     {
-        // User action
-        case 0:
-            return;
+    // User action
+        case 1:
+            if(isAdvisor()){
+                Advisor advisor = Advisor(_currentUser.getId());
+                advisor.getUserBankAccounts();
+             }
+        else if(!isAdvisor() && !isAdmin()){
+                Client client = Client(_currentUser.getId());
+                client.getBankAccounts();
+            }
+             break;
+
+         case 2:
+             if(isAdvisor()){
+                 Advisor advisor = Advisor(_currentUser.getId());
+                 advisor.TransferMoneyUser();
+             }
+             else if(!isAdvisor() && !isAdmin()){
+                 Client client = Client(_currentUser.getId());
+                 client.Transfer();
+             }
+             break;
+
+        case 3:
+            char newPassword[256];
+            cout << "New password: " << endl;
+            cin.ignore(1, '\n');
+            cin.getline(newPassword, '\n');
+            _currentUser.setPassword(newPassword);
+            _currentUser.save();
             break;
-             case 1:
-                if(_currentUser.isAdvisor()){
-                    Advisor advisor= Advisor(_currentUser.getId());
-                    advisor.getUserBankAccounts();
-                 }
-            else if(!_currentUser.isAdvisor() && !_currentUser.isAdmin()){
-                    Client client= Client(_currentUser.getId());
-                    client.getBankAccounts();
+
+         case 4:
+             if(isAdvisor()){
+                 Advisor advisor = Advisor(_currentUser.getId());
+                 advisor.ConsultMessages();
+             }
+             else if(!isAdvisor() && !isAdmin()){
+                 Client client = Client(_currentUser.getId());
+                 client.contactAdvisor();
+             }
+             break;
+
+        // Expense history
+        case 5: {
+            Client client = Client(_currentUser.getId());
+            set<int> accounts = client.getAccountsIds();
+
+            for(auto i : accounts) {
+                BankAccount* account = new BankAccount(i);
+                cout << "Expenses for account: " << account->getId() << endl;
+                set<int> expenses = account->getExpenses();
+                for (auto j : expenses) {
+                    Transaction* transaction = new Transaction(j);
+                    cout << *transaction << endl;
                 }
-                 break;
+            }
 
-             case 2:
-                 if(_currentUser.isAdvisor()){
-                     Advisor advisor= Advisor(_currentUser.getId());
-                     advisor.TransferMoneyUser();
-                 }
-                 else if(!_currentUser.isAdvisor() && !_currentUser.isAdmin()){
-                     Client client= Client(_currentUser.getId());
-                     client.Transfer();
-                 }
-                 break;
+            break;
+        }
+        // Add a transaction
+        case 8: {
+            cout << "Available accounts:" << endl;
+            Client client2 = Client(_currentUser.getId());
+            client2.getBankAccounts();
 
-             case 3:
-                 if(_currentUser.isAdvisor()){
-                     Advisor advisor= Advisor(_currentUser.getId());
-                     advisor.ConsultMessages();
-                 }
-                 else if(!_currentUser.isAdvisor() && !_currentUser.isAdmin()){
-                     Client client= Client(_currentUser.getId());
-                     client.contactAdvisor();
-                 }
-                 break;
-            /*
-             case 4:
-                 getListEntity<Artist>();
-                 break;
-             case 5:
-                 borrowedMenu();
-                 break;
-             case 6:
-                 searchList();
-                 break;
-                 // Admin action
-             case 7:
-                 getListEntity<User>();
-                 break;
-             case 8:
-                 getListEntity<Genre>();
-                 break;
-             case 9:
-                 getListEntity<Status>();
-                 break;
-             case 10:
-                 getListEntity<Transaction>();
-                 break;
-             case 11:
-                 addThing<User>();
-                 break;
-             case 12:
-                 addThing<Book>();
-                 break;
-             case 13:
-                 addThing<Cd>();
-                 break;
-             case 14:
-                 addThing<Dvd>();
-                 break;
-             case 15:
-                 addThing<Artist>();
-                 break;
-             case 16:
-                 addThing<Genre>();
-                 break;
-             case 17:
-                 addThing<Status>();
-                 break;
-             case 18:
-                 addThing<Transaction>();
-                 break;
-             default:
-                 return;
-                 break;*/
-         }
+            int accountToOpen;
+            cout << "Account ID to add the transaction to:" << endl;
+            cin >> accountToOpen;
+
+            BankAccount toOpen = BankAccount(accountToOpen);
+
+            Transaction* transaction2 = new Transaction();
+            transaction2->setBankAccount(toOpen);
+
+            Date transactionDate;
+            int amount;
+            char description[256];
+
+            cout << "Date: " << endl;
+            cin >> transactionDate;
+            transaction2->setDate(transactionDate);
+            cout << "Amount: " << endl;
+            cin >> amount;
+            transaction2->setAmount(amount);
+            cout << "Description: " << endl;
+            cin.ignore(1, '\n');
+            cin.getline(description, '\n');
+            transaction2->setDescription(description);
+
+            transaction2->save();
+            break;
+        }
+
+         default:
+             return;
+    }
 }

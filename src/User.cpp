@@ -52,24 +52,6 @@ unsigned int User::getId() const {
     return _id;
 }
 
-void User::init(map<string, string> data){
-    this->deserialization(data);
-}
-
-void User::deserialization(map<string, string> data){
-    if(!data.empty()){
-        _id = data.find("id") != data.end() ? stoi(data["id"]) : 0;
-        _firstName = data["name"];
-        _lastName = data["surname"];
-        _birthDate = data.find("birthdate") != data.end() ? Date(data["birthdate"]) : Date();
-        _phone = data["phone"];
-        _address = Address(data.find("house_number") != data.end() ? stoi(data["house_number"]) : 0, data["street"], data["postal_code"], data["town"], data["country"]);
-        _isAdmin = data.find("isadmin") != data.end() ? stoi(data["isadmin"]) : 0;
-        _isAdvisor=data.find("isadvisor") != data.end() ? stoi(data["isadvisor"]) : 0;
-        _password = data["password"];
-    }
-}
-
 string User::getPhone() const
 {
     return _phone;

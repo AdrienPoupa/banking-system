@@ -3,14 +3,15 @@
 //
 
 #include "Transaction.h"
-#include <iostream>
 
 using namespace std;
 
 string Transaction::_dbTable = "transactions";
 
 Transaction::Transaction(const BankAccount account, const Date date, int amount, const string description)
-        : _account(account), _date(date), _amount(amount), _description(description) { }
+        : _account(account), _date(date), _amount(amount), _description(description) {
+    _id = 0;
+}
 
 Transaction::Transaction(const unsigned int id) {
     map<string, string> data = BaseModel::getById(_dbTable, id);
@@ -27,6 +28,10 @@ Transaction::Transaction(const unsigned int id) {
     {
         throw invalid_argument("Please enter a valid ID");
     }
+}
+
+Transaction::Transaction() {
+    _id = 0;
 }
 
 unsigned int Transaction::getId() const {
@@ -67,6 +72,9 @@ std::string Transaction::getDescription() {
 
 bool Transaction::save()
 {
+    _account.decreaseAmount(_amount);
+    _account.save();
+
     int res = BaseModel::save(_dbTable, {
             {"id", {to_string(_id), "int"}},
             {"account", {to_string(_account.getId()), "int"}},
@@ -88,11 +96,11 @@ bool Transaction::remove()
 
 ostream& operator<< (ostream& stream, const Transaction& transaction)
 {
-    stream << "Bank account:" << endl;
+    stream << "Bank account: " << endl;
     stream << transaction._account << endl;
-    stream << "Date:" << transaction._date << endl;
-    stream << "Amount:" << transaction._amount << endl;
-    stream << "Description:" << transaction._description << endl;
+    stream << "Date: " << transaction._date << endl;
+    stream << "Amount: " << transaction._amount << endl;
+    stream << "Description: " << transaction._description << endl;
     return stream;
 }
 
@@ -111,5 +119,4 @@ istream& operator>> (std::istream& stream, Transaction& transaction)
     getline(stream, transaction._description, '\n');
 
     return stream;
-
 }

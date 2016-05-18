@@ -21,6 +21,7 @@ protected:
 public:
     Transaction(const BankAccount account, const Date date, int amount, const std::string description);
     Transaction (const unsigned int id);
+    Transaction();
 
     unsigned int getId() const;
 

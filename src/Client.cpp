@@ -2,13 +2,7 @@
  * Project Untitled
  */
 
-
-#include <set>
-#include <iostream>
-#include <map>
 #include "Client.h"
-#include "BaseModel.h"
-#include "sha256.h"
 
 using namespace std;
 
@@ -45,7 +39,8 @@ Client::~Client()
 
 }*/
 BankAccount* Client::getBankAccounts() {
-    map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id, swift, BIC,id_user,balance");
+    map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id, swift, BIC, id_user, balance",
+                                                                  "id_user = " + to_string(getId()));
 
     int totalAccount = (int)bankAccount.size();
 
@@ -54,20 +49,15 @@ BankAccount* Client::getBankAccounts() {
     bool correctId = false;
 
     do{
-        string swiftspace;
-        string bicSpace;
-        string idSpace;
         cout << "-------------------------------------------------------" << endl;
         cout << " -- Account's list of "<< getLastName() << " " << getFirstName() <<" --" << endl;
         cout << " ID |       SWIFT       |     BIC     " << endl;
         cout << "----|-------------------|--------------" << endl;
         for (int i = 1; i != totalAccount + 1; i++)
         {
-            if(stoi(bankAccount[i]["id_user"]) == getId()) {
                 cout << bankAccount[i]["id"] << "     " << bankAccount[i]["SWIFT"] << "          " <<
                 bankAccount[i]["BIC"] << endl;
                 AccountIds.insert(stoi(bankAccount[i]["id"]));
-            }
         }
 
         cout << endl << "Bank account's id : " << endl;
@@ -90,9 +80,25 @@ BankAccount* Client::getBankAccounts() {
 
     } while(!correctId);
     BankAccount *bc = new BankAccount(idToOpen);
-    cout << *bc<<endl;
+    cout << *bc << endl;
     return bc;
 }
+
+set<int> Client::getAccountsIds() {
+    map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id", "id_user=" + to_string(_id));
+
+    int totalAccount = (int)bankAccount.size();
+
+    set<int> AccountIds = set<int>();
+
+    for (int i = 1; i != totalAccount + 1; i++)
+    {
+        AccountIds.insert(stoi(bankAccount[i]["id"]));
+    }
+
+    return AccountIds;
+}
+
 Client::Client(const std::string lastName, const std::string firstName, const std::string password) {
     _lastName = lastName;
     _firstName = firstName;

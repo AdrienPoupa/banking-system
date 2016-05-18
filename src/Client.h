@@ -6,10 +6,15 @@
 #ifndef _CLIENT_H
 #define _CLIENT_H
 
+#include "BankAccount.h"
 #include "User.h"
 #include "Advisor.h"
 #include "Contact.h"
-#include "BankAccount.h"
+#include <set>
+#include <iostream>
+#include <map>
+#include "sha256.h"
+
 class BankAccount;
 
 class Client: public User {
@@ -21,6 +26,7 @@ public:
     Client(const std::string lastName, const std::string firstName, const Date birthDate);
 
     BankAccount* getBankAccounts();
+    std::set<int> getAccountsIds();
     void contactAdvisor();
     void Transfer();
     void LoanApplication();

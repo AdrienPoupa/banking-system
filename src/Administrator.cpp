@@ -45,12 +45,14 @@ Administrator::Administrator(const std::string lastName, const std::string first
     _lastName = lastName;
     _firstName = firstName;
     _password = sha256(password);
+    _id = 0;
 }
 
 Administrator::Administrator(const std::string lastName, const std::string firstName, const Date birthDate){
     _lastName = lastName;
     _firstName = firstName;
     _birthDate = birthDate;
+    _id = 0;
 
 }
 

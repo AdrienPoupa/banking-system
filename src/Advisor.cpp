@@ -47,12 +47,14 @@ Advisor::Advisor(const std::string lastName, const std::string firstName, const 
     _lastName = lastName;
     _firstName = firstName;
     _password = sha256(password);
+    _id = 0;
 }
 
 Advisor::Advisor(const std::string lastName, const std::string firstName, const Date birthDate){
     _lastName = lastName;
     _firstName = firstName;
     _birthDate = birthDate;
+    _id = 0;
 
 }
 Client* Advisor::getUsers(){
@@ -164,7 +166,7 @@ void Advisor::ConsultMessages() {
     } while(!correctId);
 
     Contact *m = new Contact(messageToOpen);
-    cout << *m <<endl;
+    cout << *m << endl;
 
 }
 void Advisor::ValidateLoan() {
