@@ -85,7 +85,35 @@ bool Loan::save()
 
     return (bool) res;
 }
+
 bool Loan::remove()
 {
     return BaseModel::remove(_dbTable, _id);
+}
+
+ostream& operator<< (ostream& stream, const Loan& loan)
+{
+    stream << "Creation date:" << loan._creation << endl;
+    stream << "Validation date:" << loan._validation << endl;
+    stream << "Sender:" << endl;
+    stream << loan._sender << endl;
+    stream << "Approved:" << loan._approved << endl;
+    return stream;
+}
+
+istream& operator>> (std::istream& stream, Loan& loan)
+{
+    cout << "Creation date: " << endl;
+    stream >> loan._creation;
+    cout << "Validation date: " << endl;
+    stream >> loan._validation;
+    cout << "Sender: " << endl;
+    int userID;
+    stream >> userID;
+    loan._sender = *new Client(userID);
+    cout << "Approved (0 or 1): " << endl;
+    stream >> loan._approved;
+
+    return stream;
+
 }

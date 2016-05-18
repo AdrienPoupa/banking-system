@@ -42,9 +42,11 @@ void BankAccount::setSwift(std::string swift) {
 std::string BankAccount::getSwift() const {
     return _swift;
 }
+
 BankAccount::BankAccount(){
 
 }
+
 BankAccount::BankAccount(std::string swift, std::string bic, int idUser){
     _swift = swift;
     _bic = bic;
@@ -86,7 +88,8 @@ void BankAccount::ConsultHistory() {
 }
 
 void BankAccount::RequestSwift() {
-
+    cout << "Swift:" << getSwift() << endl;
+    cout << "Bic:" << getBic() << endl;
 }
 
 
@@ -100,10 +103,6 @@ ostream& operator<< (ostream& stream, const BankAccount& bankAccount)
     stream << "Bank account n°: "<< bankAccount.getId()<<endl;
     stream << "Owner: " << user->getFirstName() << " " << user->getLastName() << endl;
     stream << "Balance: " << bankAccount._balance << endl;
-    /*stream << "Anniversaire: " << user._birthDate << endl;
-    stream << "Telephone: " << user._phone << endl;
-    stream << "Adresse: " << user._address << endl;
-    stream << "Est admin: " << isAdmin << endl;*/
 
     return stream;
 }
