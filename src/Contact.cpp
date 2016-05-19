@@ -15,7 +15,8 @@ Contact::Contact(unsigned int idUser, unsigned int idAdvisor, std::string messag
     this->_idAdvisor=idAdvisor;
     this->_message = message;
     this->_read = 0;
-//    this->_dateMessage = new Date();
+    Date* date = new Date();
+    this->_dateMessage = date->dateToDB();
 }
 
 Contact::Contact(unsigned int id) // Get a User from an ID provided by DB
@@ -53,7 +54,19 @@ bool Contact::save(){
     return (bool) res;
 }
 
+bool Contact::isRead() {
+    if (this->_read == 0){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
 
+void Contact::read(){
+    this->_read = 1;
+    this->save();
+}
 ostream& operator<< (ostream& stream, const Contact& contact)
 {
     Contact* c = new Contact(contact._id);

@@ -219,6 +219,7 @@ int Bank::displayMenu()
         {
             cout << "#                            #" << endl;
             cout << "# ------ Advisor Menu ------ #" << endl;
+            cout << "#  6. Consult messages       #" << endl;
             cout << "#  8. Add a transaction      #" << endl;
             cout << "#  9. Add a client           #" << endl;
         }
@@ -311,24 +312,33 @@ void Bank::redirectChoice(const int choice)
             break;
         }
 
+        case 6:{
+            if(isAdvisor()){
+                Advisor advisor = Advisor(_currentUser.getId());
+                advisor.ConsultMessages();
+            }
+            break;
+        }
+
         // Order a checkbook
         case 7: {
-            Client client = Client(_currentUser.getId());
 
-            cout << "Available accounts:" << endl;
-            Client client2 = Client(_currentUser.getId());
+                Client client = Client(_currentUser.getId());
 
-            BankAccount* toOpen = client2.getBankAccounts();
+                cout << "Available accounts:" << endl;
+                Client client2 = Client(_currentUser.getId());
 
-            Order* order = new Order();
-            Date* today = new Date();
-            order->setCreation(*today);
-            order->setClient(client);
-            order->setType(0);
-            order->setAccount(*toOpen);
-            order->save();
+                BankAccount *toOpen = client2.getBankAccounts();
 
-            break;
+                Order *order = new Order();
+                Date *today = new Date();
+                order->setCreation(*today);
+                order->setClient(client);
+                order->setType(0);
+                order->setAccount(*toOpen);
+                order->save();
+
+                break;
         }
 
         // Add a transaction

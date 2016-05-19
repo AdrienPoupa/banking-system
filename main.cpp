@@ -5,9 +5,7 @@
 using namespace std;
 
 int main() {
-   /* Bank* bank = Bank::getSingleton();
-    bank->run();*/
-Date* d = new Date();
-cout << *d;
+    Bank* bank = Bank::getSingleton();
+    bank->run();
     return 0;
 }
