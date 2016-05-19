@@ -132,7 +132,7 @@ void Advisor::ConsultMessages() {
     do{
         cout << "-------------------------------------------------------" << endl;
         cout << " -- Message's list --" << endl;
-        cout << " Id | Sender" << endl;
+        cout << " Id | Sender | Date " << endl;
         cout << "-------------|-------------------" << endl;
         for (int i = 1; i != totalUsers + 1; i++)
         {
@@ -140,7 +140,7 @@ void Advisor::ConsultMessages() {
             Client *c = new Client(stoi(messages[i]["id_client"]));
             if(stoi(messages[i]["id_advisor"]) == this->_id) {
                 cout << messages[i]["id"] << " | " << c->getLastName() << " " << c->getFirstName() <<
-                endl;
+                "|" << messages[i]["date"] << "|" << messages[i]["read"]<<endl;
                 messageIds.insert(stoi(messages[i]["id"]));
             }
         }
