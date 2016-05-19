@@ -219,7 +219,7 @@ int Bank::displayMenu()
         {
             cout << "#                            #" << endl;
             cout << "# ------ Advisor Menu ------ #" << endl;
-            cout << "#  6. Consult messages       #" << endl;
+            cout << "#  4. Consult messages       #" << endl;
             cout << "#  8. Add a transaction      #" << endl;
             cout << "#  9. Add a client           #" << endl;
         }
@@ -312,13 +312,6 @@ void Bank::redirectChoice(const int choice)
             break;
         }
 
-        case 6:{
-            if(isAdvisor()){
-                Advisor advisor = Advisor(_currentUser.getId());
-                advisor.ConsultMessages();
-            }
-            break;
-        }
 
         // Order a checkbook
         case 6: {
