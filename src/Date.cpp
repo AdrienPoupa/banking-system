@@ -18,6 +18,16 @@ Date::Date (const int month, const int day, const int year)
         _year = max(1, year);
 }
 
+Date::Date()
+{
+    time_t theTime = time(NULL);
+    struct tm *aTime = localtime(&theTime);
+
+    _day = aTime->tm_mday;
+    _month = aTime->tm_mon + 1;
+    _year = aTime->tm_year + 1900;
+}
+
 int getYearFromStr(string date)
 {
     ostringstream ss1;

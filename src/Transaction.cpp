@@ -96,7 +96,6 @@ bool Transaction::remove()
 
 ostream& operator<< (ostream& stream, const Transaction& transaction)
 {
-    stream << "Bank account: " << endl;
     stream << transaction._account << endl;
     stream << "Date: " << transaction._date << endl;
     stream << "Amount: " << transaction._amount << endl;

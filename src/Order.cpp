@@ -15,10 +15,11 @@ using namespace std;
 
 string Order::_dbTable = "orders";
 
-Order::Order(const Date creation, const Date sent, int type, Client user) : _creation(creation),
+Order::Order(const Date creation, const Date sent, int type, Client user, BankAccount account) : _creation(creation),
                                                                                _sent(sent),
                                                                                 _type(type),
-                                                                               _user(user) {
+                                                                               _user(user),
+                                                                                _account(account){
     _id = 0;
 }
 
@@ -32,11 +33,16 @@ Order::Order(const unsigned int id) {
         _sent = Date(data["sent"]);
         _type = stoi(data["type"]);
         _user = Client((unsigned) stoi(data["user"]));
+        _account = BankAccount((unsigned) stoi(data["account"]));
     }
     else
     {
         throw invalid_argument("Please enter a valid ID");
     }
+}
+
+Order::Order() {
+    _id = 0;
 }
 
 unsigned int Order::getId() {
@@ -59,6 +65,14 @@ Date Order::getSent() {
     return _sent;
 }
 
+void Order::setAccount(BankAccount account) {
+    _account = account;
+}
+
+BankAccount Order::getAccount() {
+    return _account;
+}
+
 void Order::setType(int type) {
     _type = type;
 }
@@ -67,11 +81,11 @@ int Order::getType() {
     return _type;
 }
 
-void Order::setUser(Client user) {
+void Order::setClient(Client user) {
     _user = user;
 }
 
-Client Order::getUser() {
+Client Order::getClient() {
     return _user;
 }
 
@@ -91,6 +105,7 @@ bool Order::save()
             {"sent", {_sent.dateToDB(), "string"}},
             {"user", {to_string(_user.getId()), "int"}},
             {"type", {to_string(_type), "int"}},
+            {"account", {to_string(_account.getId()), "int"}},
     });
     if (_id == 0)
     {
@@ -109,9 +124,15 @@ ostream& operator<< (ostream& stream, const Order& order)
 {
     stream << "Creation date:" << order._creation << endl;
     stream << "Sent:" << order._sent << endl;
-    stream << "Type:" << order._type << endl;
+    if (order._type == '0') {
+        stream << "Type: Checkbook" << endl;
+    }
+    else {
+        stream << "Type: Credir card" << endl;
+    }
     stream << "User:" << endl;
     stream << order._user << endl;
+    stream << order._account << endl;
     return stream;
 }
 
@@ -121,12 +142,16 @@ istream& operator>> (std::istream& stream, Order& order)
     stream >> order._creation;
     cout << "Sent: " << endl;
     stream >> order._sent;
-    cout << "Type: " << endl;
+    cout << "Type (0 for checkbook, 1 for credit card): " << endl;
     stream >> order._type;
     cout << "User ID: " << endl;
     int userID;
     stream >> userID;
-    order._user = *new Client(userID);
+    order._user = *new Client((unsigned) userID);
+    cout << "BankAccount ID: " << endl;
+    int bankID;
+    stream >> bankID;
+    order._account = *new BankAccount((unsigned) bankID);
 
     return stream;
 

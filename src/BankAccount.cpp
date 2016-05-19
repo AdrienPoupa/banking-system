@@ -4,6 +4,8 @@
 
 
 #include "BankAccount.h"
+#include "Transaction.h"
+
 using namespace std;
 /**
  * BankAccount implementation
@@ -104,7 +106,12 @@ void BankAccount::Transfer(int amount, BankAccount* bc) {
 }
 
 void BankAccount::ConsultHistory() {
-
+    cout << "Expenses for account: " << getId() << endl;
+    set<int> expenses = getExpenses();
+    for (auto j : expenses) {
+        Transaction* transaction = new Transaction(j);
+        cout << *transaction << endl;
+    }
 }
 
 void BankAccount::decreaseAmount(int less) {

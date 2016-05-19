@@ -1,5 +1,6 @@
 #include "Bank.h"
 #include "Transaction.h"
+#include "Order.h"
 
 using namespace std;
 
@@ -203,7 +204,7 @@ int Bank::displayMenu()
         cout << endl;
         cout << "##############################" << endl;
         cout << "#                            #" << endl;
-        cout << "#  -- Main menu --           #" << endl;
+        cout << "#  ------- Main menu ------- #" << endl;
         cout << "#  1. Consult bank account   #" << endl;
         cout << "#  2. Transfer               #" << endl;
         cout << "#  3. Change password        #" << endl;
@@ -212,15 +213,14 @@ int Bank::displayMenu()
         {
             cout << "#                            #" << endl;
             cout << "# ------- Admin Menu ------- #" << endl;
-            cout << "#  10. ...                   #" << endl;
+            cout << "#  10. Add an advisor        #" << endl;
         }
         else if (isAdvisor())
         {
             cout << "#                            #" << endl;
             cout << "# ------ Advisor Menu ------ #" << endl;
-            cout << "#  7. Consult messages       #" << endl;
             cout << "#  8. Add a transaction      #" << endl;
-            cout << "#  9. Liste des utilisateurs #" << endl;
+            cout << "#  9. Add a client           #" << endl;
         }
         else
         {
@@ -230,7 +230,7 @@ int Bank::displayMenu()
             cout << "#  5. Expense history        #" << endl;
             cout << "#  6. Order a checkbook      #" << endl;
             cout << "#  7. Order a credit card    #" << endl;
-            cout << "#  8. Add a transaction     #" << endl;
+            cout << "#  8. Add a transaction      #" << endl;
         }
 
         cout << "#  -----------------------   #" << endl;
@@ -305,37 +305,41 @@ void Bank::redirectChoice(const int choice)
 
             for(auto i : accounts) {
                 BankAccount* account = new BankAccount(i);
-                cout << "Expenses for account: " << account->getId() << endl;
-                set<int> expenses = account->getExpenses();
-                for (auto j : expenses) {
-                    Transaction* transaction = new Transaction(j);
-                    cout << *transaction << endl;
-                }
+                account->ConsultHistory();
             }
 
             break;
         }
+
+        // Order a checkbook
         case 7: {
-            if (isAdvisor()) {
-                Advisor advisor = Advisor(_currentUser.getId());
-                advisor.ConsultMessages();
-            }
-        }
+            Client client = Client(_currentUser.getId());
+
+            cout << "Available accounts:" << endl;
+            Client client2 = Client(_currentUser.getId());
+
+            BankAccount* toOpen = client2.getBankAccounts();
+
+            Order* order = new Order();
+            Date* today = new Date();
+            order->setCreation(*today);
+            order->setClient(client);
+            order->setType(0);
+            order->setAccount(*toOpen);
+            order->save();
+
             break;
+        }
+
         // Add a transaction
         case 8: {
             cout << "Available accounts:" << endl;
             Client client2 = Client(_currentUser.getId());
-            client2.getBankAccounts();
 
-            int accountToOpen;
-            cout << "Account ID to add the transaction to:" << endl;
-            cin >> accountToOpen;
-
-            BankAccount toOpen = BankAccount(accountToOpen);
+            BankAccount* toOpen = client2.getBankAccounts();
 
             Transaction* transaction2 = new Transaction();
-            transaction2->setBankAccount(toOpen);
+            transaction2->setBankAccount(*toOpen);
 
             Date transactionDate;
             int amount;
