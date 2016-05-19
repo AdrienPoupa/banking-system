@@ -32,7 +32,7 @@ Order::Order(const unsigned int id) {
         _creation = Date(data["creation"]);
         _sent = Date(data["sent"]);
         _type = stoi(data["type"]);
-        _user = Client((unsigned) stoi(data["user"]));
+        _user = Client((unsigned) stoi(data["user_id"]));
         _account = BankAccount((unsigned) stoi(data["account"]));
     }
     else
@@ -103,7 +103,7 @@ bool Order::save()
             {"id", {to_string(_id), "int"}},
             {"creation", {_creation.dateToDB(), "string"}},
             {"sent", {_sent.dateToDB(), "string"}},
-            {"user", {to_string(_user.getId()), "int"}},
+            {"user_id", {to_string(_user.getId()), "int"}},
             {"type", {to_string(_type), "int"}},
             {"account", {to_string(_account.getId()), "int"}},
     });
