@@ -17,7 +17,7 @@ class Date
 {
     public:
         static int monthLength[];
-        Date(const int day = -1, const int month = -1, const int year = -1);
+        Date(const int day, const int month, const int year);
         Date(const std::string dateDB);
         Date();
 

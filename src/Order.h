@@ -34,7 +34,7 @@ public:
     Date getSent();
 
     void setAccount(BankAccount account);
-    Date getAccount();
+    BankAccount getAccount();
 
     void setType(int type);
     int getType();
