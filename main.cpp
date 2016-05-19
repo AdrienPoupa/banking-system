@@ -7,19 +7,18 @@
 using namespace std;
 
 int main() {
-   /* Bank* bank = Bank::getSingleton();
-    bank->run();*/
-    time_t rawtime;
-    struct tm * timeinfo;
-    char buffer[80];
+    try
+    {
+        Bank* bank = Bank::getSingleton();
 
-    time (&rawtime);
-    timeinfo = localtime(&rawtime);
+        bank->run();
 
-    strftime(buffer,80,"%d-%m-%Y %I:%M:%S",timeinfo);
-    std::string str(buffer);
-
-    std::cout << str;
+        delete bank;
+    }
+    catch (const exception& e)
+    {
+        cout << e.what() << endl;
+    }
 
     return 0;
 }

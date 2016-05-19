@@ -312,6 +312,30 @@ void Bank::redirectChoice(const int choice)
         }
 
         // Order a checkbook
+        case 6: {
+            Client client = Client(_currentUser.getId());
+
+            cout << "Available accounts:" << endl;
+            Client client2 = Client(_currentUser.getId());
+
+            BankAccount* toOpen = client2.getBankAccounts();
+
+            Order* order = new Order();
+            Date* today = new Date();
+            Date* sent = new Date(-1, -1, -1);
+            order->setCreation(*today);
+            order->setSent(*sent);
+            order->setClient(client);
+            order->setType(0);
+            order->setAccount(*toOpen);
+            order->save();
+
+            cout << "Credit checkbook" << endl;
+
+            break;
+        }
+
+        // Order a credit card
         case 7: {
             Client client = Client(_currentUser.getId());
 
@@ -322,11 +346,15 @@ void Bank::redirectChoice(const int choice)
 
             Order* order = new Order();
             Date* today = new Date();
+            Date* sent = new Date(-1, -1, -1);
             order->setCreation(*today);
+            order->setSent(*sent);
             order->setClient(client);
-            order->setType(0);
+            order->setType(1);
             order->setAccount(*toOpen);
             order->save();
+
+            cout << "Credit card ordered" << endl;
 
             break;
         }
