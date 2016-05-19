@@ -18,12 +18,16 @@ protected:
     unsigned int _id;
     unsigned int _idClient;
     unsigned int _idAdvisor;
+    std::string _dateMessage;
+    int _read;
     std::string _message;
     static std::string _dbTable;
 public:
     Contact(unsigned int idUser, unsigned int idAvisor, std::string message);
     Contact(int unsigned id); // Get a message from an ID provided by DB
     bool save();
+    bool isRead();
+    std::string getDateMessage();
     friend std::ostream& operator<< (std::ostream& stream, const Contact& contact);
 
 };

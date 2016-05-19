@@ -218,6 +218,7 @@ int Bank::displayMenu()
         {
             cout << "#                            #" << endl;
             cout << "# ------ Advisor Menu ------ #" << endl;
+            cout << "#  7. Consult messages       #" << endl;
             cout << "#  8. Add a transaction      #" << endl;
             cout << "#  9. Liste des utilisateurs #" << endl;
         }
@@ -314,6 +315,13 @@ void Bank::redirectChoice(const int choice)
 
             break;
         }
+        case 7: {
+            if (isAdvisor()) {
+                Advisor advisor = Advisor(_currentUser.getId());
+                advisor.ConsultMessages();
+            }
+        }
+            break;
         // Add a transaction
         case 8: {
             cout << "Available accounts:" << endl;
