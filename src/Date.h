@@ -19,6 +19,7 @@ class Date
         static int monthLength[];
         Date(const int day = -1, const int month = -1, const int year = -1);
         Date(const std::string dateDB);
+        Date();
 
         int getMonth() const;
         void setMonth(const int month);

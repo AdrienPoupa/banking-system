@@ -17,11 +17,13 @@ protected:
     Date _sent;
     int _type;
     Client _user;
+    BankAccount _account;
 
     static std::string _dbTable;
 public:
-    Order(const Date creation, const Date sent, int type, Client user);
+    Order(const Date creation, const Date sent, int type, Client user, BankAccount account);
     Order(const unsigned int id);
+    Order();
 
     unsigned int getId();
 
@@ -31,11 +33,14 @@ public:
     void setSent(Date sent);
     Date getSent();
 
+    void setAccount(BankAccount account);
+    Date getAccount();
+
     void setType(int type);
     int getType();
 
-    void setUser(Client user);
-    Client getUser();
+    void setClient(Client user);
+    Client getClient();
 
     void OrderCheckbook();
 
