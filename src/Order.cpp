@@ -1,11 +1,12 @@
 /**
- * Project Untitled
+ * Banking system
  */
 
 
 #include "Order.h"
 #include "BaseModel.h"
 #include "Client.h"
+#include "Notification.h"
 
 using namespace std;
 
@@ -90,21 +91,54 @@ Client Order::getClient() {
 }
 
 void Order::OrderCheckbook() {
-    Date* today = new Date();
-    Date* sent = new Date(-1, -1, -1);
-    this->setCreation(*today);
-    this->setSent(*sent);
-    this->setType(0);
-    this->save();
+
+    map<int, map<string, string>> orders = BaseModel::select("orders", "id",
+                                                            "user_id = " + to_string(_user.getId()) + " AND sent = '0001-01-01'");
+
+    int totalOrders = (int)orders.size();
+
+    if (totalOrders > 0) {
+        cout << "You already have an order pending" << endl;
+    }
+    else {
+        Date* today = new Date();
+        Date* sent = new Date(-1, -1, -1);
+        this->setCreation(*today);
+        this->setSent(*sent);
+        this->setType(0);
+        this->save();
+
+        // Notify the advisor
+        string notificationMessage = "New checkbook order from "
+                                     + _user.getLastName() + " " + _user.getFirstName();
+        Notification* notification = new Notification(notificationMessage, (unsigned) _user.getAdvisor());
+        notification->save();
+    }
 }
 
 void Order::OrderCreditCard() {
-    Date* today = new Date();
-    Date* sent = new Date(-1, -1, -1);
-    this->setCreation(*today);
-    this->setSent(*sent);
-    this->setType(1);
-    this->save();
+    map<int, map<string, string>> orders = BaseModel::select("orders", "id",
+                                                             "user_id = " + to_string(_user.getId()) + " AND sent = '0001-01-01'");
+
+    int totalOrders = (int)orders.size();
+
+    if (totalOrders > 0) {
+        cout << "You already have an order pending" << endl;
+    }
+    else {
+        Date *today = new Date();
+        Date *sent = new Date(-1, -1, -1);
+        this->setCreation(*today);
+        this->setSent(*sent);
+        this->setType(1);
+        this->save();
+
+        // Notify the advisor
+        string notificationMessage = "New credit card order from "
+                                     + _user.getLastName() + " " + _user.getFirstName();
+        Notification* notification = new Notification(notificationMessage, (unsigned) _user.getAdvisor());
+        notification->save();
+    }
 }
 
 bool Order::save()

@@ -476,7 +476,7 @@ void Bank::redirectChoice(const int choice)
             }
         }
 
-            // Ajout d'un compte bancaire
+        // Add a bank account
         case 10: {
 
             if(isAdvisor()){

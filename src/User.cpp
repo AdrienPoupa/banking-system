@@ -67,7 +67,15 @@ void User::setPhone(const string phone)
 
 void User::setPassword(const string password)
 {
-    _password = sha256(password);
+    if (password.length() < 8) {
+        cout << "Password too short" << endl;
+    }
+    else if (password == _firstName || password == _lastName) {
+        cout << "Password same as username" << endl;
+    }
+    else {
+        _password = sha256(password);
+    }
 }
 
 bool User::checkPassword(const string password) const
