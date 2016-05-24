@@ -78,7 +78,7 @@ bool Loan::save()
             {"creation", {_creation.dateToDB(), "string"}},
             {"validation", {_validation.dateToDB(), "string"}},
             {"sender", {to_string(_sender.getId()), "int"}},
-            {"approved", {to_string(_approved), "int"}}
+            {"approved", {to_string((int) _approved), "int"}}
     });
     if (_id == 0)
     {
@@ -112,7 +112,7 @@ istream& operator>> (std::istream& stream, Loan& loan)
     cout << "Sender: " << endl;
     int userID;
     stream >> userID;
-    loan._sender = *new Client(userID);
+    loan._sender = *new Client((unsigned) userID);
     cout << "Approved (0 or 1): " << endl;
     stream >> loan._approved;
 

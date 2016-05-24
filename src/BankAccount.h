@@ -47,8 +47,9 @@ public:
     void Transfer(int amount, BankAccount* bc);
     
     void ConsultHistory();
-    
+
     void RequestSwift();
+
     friend std::ostream& operator<< (std::ostream& stream, const BankAccount& bankAccount);
 };
 

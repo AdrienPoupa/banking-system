@@ -8,6 +8,11 @@
 
 #include "../sqlite/SQLiteCpp.h"
 
+/**
+ * SQlite mapper
+ * Adrien Poupa & Timothée Barbot
+ * December 2015
+ */
 class BaseModel {
 private:
     BaseModel(){}

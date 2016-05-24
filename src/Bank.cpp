@@ -1,6 +1,7 @@
 #include "Bank.h"
 #include "Transaction.h"
 #include "Order.h"
+#include "Notification.h"
 
 using namespace std;
 
@@ -201,6 +202,28 @@ int Bank::displayMenu()
     bool failInput = false;
     do
     {
+        map<int, map<string, string>> notifications = BaseModel::select("notifications", "id, message, read",
+                                                      "userid = " + to_string(_currentUser.getId()) + " AND read = 0");
+
+        int totalNotifications = (int)notifications.size();
+
+        if (totalNotifications > 0) {
+            cout << endl;
+            cout << "##############################" << endl;
+            cout << "#                            #" << endl;
+            cout << "#  --- New Notifications --- #" << endl;
+            cout << "#                            #" << endl;
+            cout << "##############################" << endl;
+
+            for (int i = 1; i != totalNotifications + 1; i++)
+            {
+                cout << i << ". " << notifications[i]["message"] << endl;
+                Notification* toBeRead = new Notification((unsigned) stoi(notifications[i]["id"]));
+                toBeRead->setRead(true);
+                toBeRead->save();
+            }
+        }
+
         cout << endl;
         cout << "##############################" << endl;
         cout << "#                            #" << endl;
@@ -321,16 +344,11 @@ void Bank::redirectChoice(const int choice)
             BankAccount* toOpen = client2.getBankAccounts();
 
             Order* order = new Order();
-            Date* today = new Date();
-            Date* sent = new Date(-1, -1, -1);
-            order->setCreation(*today);
-            order->setSent(*sent);
             order->setClient(client);
-            order->setType(0);
             order->setAccount(*toOpen);
-            order->save();
+            order->OrderCheckbook();
 
-            cout << "Credit checkbook" << endl;
+            cout << "Checkbook ordered" << endl;
 
             break;
         }
@@ -345,14 +363,9 @@ void Bank::redirectChoice(const int choice)
             BankAccount* toOpen = client2.getBankAccounts();
 
             Order* order = new Order();
-            Date* today = new Date();
-            Date* sent = new Date(-1, -1, -1);
-            order->setCreation(*today);
-            order->setSent(*sent);
             order->setClient(client);
-            order->setType(1);
             order->setAccount(*toOpen);
-            order->save();
+            order->OrderCreditCard();
 
             cout << "Credit card ordered" << endl;
 
