@@ -93,10 +93,6 @@ int BankAccount::ConsultAmount() {
     return this->_balance;
 }
 
-void BankAccount::setBalance(int balance) {
-    _balance = balance;
-}
-
 bool BankAccount::save(){
         int res = BaseModel::save(_dbTable, {
                 {"id", {to_string(_id), "int"}},

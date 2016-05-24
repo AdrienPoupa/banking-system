@@ -44,7 +44,6 @@ public:
 
     int ConsultAmount();
     void decreaseAmount(int less);
-    void setBalance(int balance);
 
     std::set<int> getExpenses();
     

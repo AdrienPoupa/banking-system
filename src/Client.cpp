@@ -85,52 +85,6 @@ BankAccount* Client::getBankAccounts() {
     return bc;
 }
 
-BankAccount* Client::getBankAccounts() {
-    map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id, swift, BIC, id_user, balance",
-                                                                  "id_user = " + to_string(getId()));
-
-    int totalAccount = (int)bankAccount.size();
-
-    int idToOpen;
-    set<int> AccountIds = set<int>();
-    bool correctId = false;
-
-    do{
-        cout << "-------------------------------------------------------" << endl;
-        cout << " -- Account's list of "<< getLastName() << " " << getFirstName() <<" --" << endl;
-        cout << " ID |       SWIFT       |     BIC     " << endl;
-        cout << "----|-------------------|--------------" << endl;
-        for (int i = 1; i != totalAccount + 1; i++)
-        {
-            cout << bankAccount[i]["id"] << "     " << bankAccount[i]["SWIFT"] << "          " <<
-            bankAccount[i]["BIC"] << endl;
-            AccountIds.insert(stoi(bankAccount[i]["id"]));
-        }
-
-        cout << endl << "Bank account's id : " << endl;
-        cin >> idToOpen;
-
-        if(cin.fail())
-        {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-        else
-        {
-            correctId = AccountIds.find(idToOpen) != AccountIds.end();
-        }
-
-        if (!correctId)
-        {
-            cout << "Unknown ID ..." << endl;
-        }
-
-    } while(!correctId);
-    BankAccount *bc = new BankAccount(idToOpen);
-    cout << *bc << endl;
-    return bc;
-}
-
 
 set<int> Client::getAccountsIds() {
     map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id", "id_user=" + to_string(_id));
