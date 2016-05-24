@@ -46,16 +46,16 @@ public:
     void init(std::map<std::string, std::string> data);
     void deserialization(std::map<std::string, std::string> data);
 
-    std::string getPhone() const ;
+    std::string getPhone()  const;
     void setPhone(const std::string phone);
 
     void setPassword(const std::string password);
     bool checkPassword(const std::string password) const;
 
-    Address getAddress()const ;
+    Address getAddress() const;
     void setAddress(const Address address);
 
-    bool isAdmin()const ;
+    bool isAdmin() const;
     void setAdmin(const int isAdmin);
 
     void edit();

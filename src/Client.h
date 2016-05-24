@@ -25,10 +25,16 @@ public:
     Client(const std::string lastName = "John", const std::string firstName = "Doe", const std::string password = "123");
     Client(const std::string lastName, const std::string firstName, const Date birthDate);
 
+    void setAdvisor(int idAdvisor);
+    int getAdvisor();
+
     BankAccount* getBankAccounts();
     std::set<int> getAccountsIds();
+
     void contactAdvisor();
+
     void Transfer();
+
     void LoanApplication();
 };
 

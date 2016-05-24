@@ -1,3 +1,9 @@
+/**
+ * SQlite mapper
+ * Adrien Poupa & Timothée Barbot
+ * December 2015
+ */
+
 #include "BaseModel.h"
 
 using namespace std;

@@ -90,11 +90,21 @@ Client Order::getClient() {
 }
 
 void Order::OrderCheckbook() {
-
+    Date* today = new Date();
+    Date* sent = new Date(-1, -1, -1);
+    this->setCreation(*today);
+    this->setSent(*sent);
+    this->setType(0);
+    this->save();
 }
 
 void Order::OrderCreditCard() {
-
+    Date* today = new Date();
+    Date* sent = new Date(-1, -1, -1);
+    this->setCreation(*today);
+    this->setSent(*sent);
+    this->setType(1);
+    this->save();
 }
 
 bool Order::save()
