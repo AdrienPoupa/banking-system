@@ -36,6 +36,9 @@ public:
     std::string getBic() const;
     void setSwift(std::string swift);
 
+    void setBalance(int balance);
+    int getBalance();
+
     std::string getSwift() const;
     bool save();
 
@@ -50,6 +53,11 @@ public:
     
     void RequestSwift();
     friend std::ostream& operator<< (std::ostream& stream, const BankAccount& bankAccount);
+    friend std::istream& operator>> (std::istream& stream, BankAccount& bankAccount);
+
+    void getusersIDS();
+
+    bool remove();
 };
 
 #endif //_BANK ACCOUNT_H

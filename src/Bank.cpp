@@ -222,6 +222,7 @@ int Bank::displayMenu()
             cout << "#  4. Consult messages       #" << endl;
             cout << "#  8. Add a transaction      #" << endl;
             cout << "#  9. Add a client           #" << endl;
+           // cout << "# 10. Add a bankaccount      #" << endl;
         }
         else
         {
@@ -388,6 +389,73 @@ void Bank::redirectChoice(const int choice)
 
             transaction2->save();
             break;
+        }
+
+            // Ajout d'un compte bancaire
+        case 10: {
+
+            if(isAdvisor()){
+                BankAccount* newbankaccount = new BankAccount();
+
+                int userIDD;
+                std::string swift2;
+                std::string bic2;
+                int balance2;
+
+                newbankaccount->getusersIDS();
+
+                cout << "UserId: " << endl;
+                cin >> userIDD;
+                newbankaccount->setUserId(userIDD);
+                cout << "Swift: " << endl;
+                cin >> swift2;
+                newbankaccount->setSwift(swift2);
+                cout << "BIC: " << endl;
+                cin >> bic2;
+                newbankaccount->setBic(bic2);
+                cout << "Balance: " << endl;
+                cin >> balance2;
+                newbankaccount->setBalance(balance2);
+
+                newbankaccount->save();
+            }
+            else
+            {
+
+            }
+
+            break;
+        }
+
+        case 11: {
+
+            if(isAdvisor()){
+
+                    BankAccount* newbankaccount = new BankAccount();
+
+                    int userIDD;
+                    int id_;
+
+                    newbankaccount->getusersIDS();
+
+                cout << "Choose the client that you want to close an account by putting the IDuser: " << endl;
+                cin >> userIDD;
+
+                Client client2 = Client(userIDD);
+
+                BankAccount* toOpen = client2.getBankAccounts();
+
+                cout << "Choose the account that you want to close by putting the ID" << endl;
+                cin >>id_;
+
+                BankAccount suppr = BankAccount(id_);
+                suppr.remove();
+
+            }
+            else
+            {
+
+            }
         }
 
          default:

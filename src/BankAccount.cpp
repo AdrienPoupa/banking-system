@@ -47,6 +47,14 @@ std::string BankAccount::getSwift() const {
     return _swift;
 }
 
+void BankAccount::setBalance(int balance) {
+    _balance = balance;
+}
+
+int BankAccount::getBalance() {
+    return _balance;
+}
+
 BankAccount::BankAccount(){
     _id = 0;
 }
@@ -147,4 +155,63 @@ ostream& operator<< (ostream& stream, const BankAccount& bankAccount)
     stream << "Balance: " << bankAccount._balance << endl;
 
     return stream;
+}
+
+istream& operator>> (std::istream& stream, BankAccount& bankAccount)
+{
+    cout << "Creation BankAccount: " << endl;
+    cout << "Swift: " << endl;
+    stream >> bankAccount._swift;
+    cout << "BIC: " << endl;
+    stream >> bankAccount._bic;
+    cout << "Balance: " << endl;
+    stream >> bankAccount._balance;
+
+    return stream;
+
+}
+
+void BankAccount::getusersIDS() {
+
+    BankAccount* test = new BankAccount();
+
+    map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname, isadmin, isadvisor");
+    int totalUsers = (int)users.size();
+    set<int> userIds = set<int>();
+
+    for (int i = 1; i != totalUsers + 1; i++)
+    {
+        string space, star = "";
+
+        int spaceNumber;
+
+        if (stoi(users[i]["id"]) < 10) {
+            spaceNumber = 11;
+
+        }
+        else {
+            spaceNumber = 10;
+        }
+
+        for(unsigned int i = 0; i < (spaceNumber - users[i]["id"].length()); i++){
+            space += " ";
+        }
+
+        if (users[i]["isadmin"] == "1")
+        {
+            star = "**";
+        }
+        if(users[i]["isadvisor"] == "1"){
+            star = "*";
+        }
+
+        cout << space << users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] << endl;
+        userIds.insert(stoi(users[i]["id"]));
+    }
+
+}
+
+bool BankAccount::remove()
+{
+    return BaseModel::remove(_dbTable, _id);
 }

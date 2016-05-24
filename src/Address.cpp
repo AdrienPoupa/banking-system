@@ -80,5 +80,4 @@ istream& operator>> (std::istream& stream, Address& address)
     getline(stream, address._country, '\n');
 
     return stream;
-
 }
