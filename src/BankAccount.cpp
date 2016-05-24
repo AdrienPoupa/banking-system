@@ -3,6 +3,7 @@
  */
 
 
+#include <c++/algorithm>
 #include "BankAccount.h"
 #include "Transaction.h"
 
@@ -13,8 +14,9 @@ using namespace std;
 
 string BankAccount::_dbTable = "bank_account";
 
-BankAccount::BankAccount(unsigned int user_id, const string swift, const string bic) :_idUser(user_id),
+BankAccount::BankAccount(unsigned int user_id, const string swift, const string bic, const int balance) :_idUser(user_id),
                                                                                          _swift(swift),
+                                                                                         _balance(balance),
                                                                                          _bic(bic) {
     _id = 0;
 }
@@ -63,12 +65,12 @@ BankAccount::BankAccount(std::string swift, std::string bic, int idUser){
     _swift = swift;
     _bic = bic;
     try {
-        User *user = new Client(idUser);
+        User *user = new Client((unsigned) idUser);
     }
     catch (exception e){
         cout << e.what()<<endl;
     }
-    _idUser = idUser;
+    _idUser = (unsigned) idUser;
 }
 
 BankAccount::BankAccount(const int id) // Get a User from an ID provided by DB
@@ -76,11 +78,11 @@ BankAccount::BankAccount(const int id) // Get a User from an ID provided by DB
     map<string, string> data = BaseModel::getById(_dbTable, id);
 
     if (!data.empty()) {
-        _id = id;
+        _id = (unsigned) id;
         _swift = data["SWIFT"];
         _bic = data["BIC"];
         _balance = stoi(data["balance"]);
-        _idUser = stoi(data["id_user"]);
+        _idUser = (unsigned) stoi(data["id_user"]);
     }
     else {
         throw invalid_argument("The id of the bank account does not exist.");
@@ -90,6 +92,11 @@ BankAccount::BankAccount(const int id) // Get a User from an ID provided by DB
 int BankAccount::ConsultAmount() {
     return this->_balance;
 }
+
+void BankAccount::setBalance(int balance) {
+    _balance = balance;
+}
+
 bool BankAccount::save(){
         int res = BaseModel::save(_dbTable, {
                 {"id", {to_string(_id), "int"}},
@@ -144,6 +151,24 @@ set<int> BankAccount::getExpenses() {
 void BankAccount::RequestSwift() {
     cout << "Swift:" << getSwift() << endl;
     cout << "Bic:" << getBic() << endl;
+}
+
+string BankAccount::random_string(size_t length)
+{
+    // Random string generation for BIC & SWIFT
+    // Credits: http://stackoverflow.com/questions/440133/how-do-i-create-a-random-alpha-numeric-string-in-c
+    auto randchar = []() -> char
+    {
+        const char charset[] =
+                "0123456789"
+                        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        "abcdefghijklmnopqrstuvwxyz";
+        const size_t max_index = (sizeof(charset) - 1);
+        return charset[ rand() % max_index ];
+    };
+    std::string str(length,0);
+    std::generate_n( str.begin(), length, randchar );
+    return str;
 }
 
 

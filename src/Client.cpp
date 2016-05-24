@@ -3,6 +3,7 @@
  */
 
 #include "Client.h"
+#include "Notification.h"
 
 using namespace std;
 
@@ -177,20 +178,32 @@ Client::Client(const std::string lastName, const std::string firstName, const Da
     _lastName = lastName;
     _firstName = firstName;
     _birthDate = birthDate;
+}
 
+void Client::setAdvisor(int idAdvisor) {
+    _idAdvisor = idAdvisor;
+}
+
+int Client::getAdvisor() {
+    return _idAdvisor;
 }
 
 void Client::contactAdvisor() {
     string message;
-    Advisor *advisor = new Advisor(this->_idAdvisor);
+    Advisor *advisor = new Advisor((unsigned) this->_idAdvisor);
     cout << "You are going to send a message to: " << advisor->getLastName() << " " << advisor->getFirstName() << endl;
     cout << "Enter the message you want to send." << endl;
     cin.ignore();
     getline(cin, message);
-    if(message !=""){
-        Contact* contact = new Contact(this->_id, this->_idAdvisor, message);
+    if(message != ""){
+        Contact* contact = new Contact(this->_id, (unsigned) this->_idAdvisor, message);
         contact->save();
-        cout << "Your message has been sent"<<endl;
+        cout << "Your message has been sent" << endl;
+
+        // Add a new notification to the advisor
+        string notificationMessage = "New message from " + this->getLastName() + " " + this->getFirstName() + " : " + message;
+        Notification* notification = new Notification(notificationMessage, (unsigned) this->_idAdvisor);
+        notification->save();
     }
     else{
         cout << "You cannot send an empty message." << endl;

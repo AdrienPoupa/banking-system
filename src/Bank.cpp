@@ -1,6 +1,8 @@
 #include "Bank.h"
 #include "Transaction.h"
 #include "Order.h"
+#include "Notification.h"
+#include "Loan.h"
 
 using namespace std;
 
@@ -201,6 +203,28 @@ int Bank::displayMenu()
     bool failInput = false;
     do
     {
+        map<int, map<string, string>> notifications = BaseModel::select("notifications", "id, message, read",
+                                                      "userid = " + to_string(_currentUser.getId()) + " AND read = 0");
+
+        int totalNotifications = (int)notifications.size();
+
+        if (totalNotifications > 0) {
+            cout << endl;
+            cout << "##############################" << endl;
+            cout << "#                            #" << endl;
+            cout << "#  --- New Notifications --- #" << endl;
+            cout << "#                            #" << endl;
+            cout << "##############################" << endl;
+
+            for (int i = 1; i != totalNotifications + 1; i++)
+            {
+                cout << i << ". " << notifications[i]["message"] << endl;
+                Notification* toBeRead = new Notification((unsigned) stoi(notifications[i]["id"]));
+                toBeRead->setRead(true);
+                toBeRead->save();
+            }
+        }
+
         cout << endl;
         cout << "##############################" << endl;
         cout << "#                            #" << endl;
@@ -222,7 +246,9 @@ int Bank::displayMenu()
             cout << "#  4. Consult messages       #" << endl;
             cout << "#  8. Add a transaction      #" << endl;
             cout << "#  9. Add a client           #" << endl;
-           // cout << "# 10. Add a bankaccount      #" << endl;
+            cout << "#  10. Create a bank account #" << endl;
+            cout << "#  11. Close a bank account  #" << endl;
+            cout << "#  13. Handle loans          #" << endl;
         }
         else
         {
@@ -233,6 +259,7 @@ int Bank::displayMenu()
             cout << "#  6. Order a checkbook      #" << endl;
             cout << "#  7. Order a credit card    #" << endl;
             cout << "#  8. Add a transaction      #" << endl;
+            cout << "#  12. Loan application      #" << endl;
         }
 
         cout << "#  -----------------------   #" << endl;
@@ -324,16 +351,11 @@ void Bank::redirectChoice(const int choice)
             BankAccount* toOpen = client2.getBankAccounts();
 
             Order* order = new Order();
-            Date* today = new Date();
-            Date* sent = new Date(-1, -1, -1);
-            order->setCreation(*today);
-            order->setSent(*sent);
             order->setClient(client);
-            order->setType(0);
             order->setAccount(*toOpen);
-            order->save();
+            order->OrderCheckbook();
 
-            cout << "Credit checkbook" << endl;
+            cout << "Checkbook ordered" << endl;
 
             break;
         }
@@ -348,14 +370,9 @@ void Bank::redirectChoice(const int choice)
             BankAccount* toOpen = client2.getBankAccounts();
 
             Order* order = new Order();
-            Date* today = new Date();
-            Date* sent = new Date(-1, -1, -1);
-            order->setCreation(*today);
-            order->setSent(*sent);
             order->setClient(client);
-            order->setType(1);
             order->setAccount(*toOpen);
-            order->save();
+            order->OrderCreditCard();
 
             cout << "Credit card ordered" << endl;
 
@@ -389,6 +406,74 @@ void Bank::redirectChoice(const int choice)
 
             transaction2->save();
             break;
+        }
+
+        // Make a loan application
+        case 12: {
+            Client client3 = Client(_currentUser.getId());
+
+            Loan* loanApplication = new Loan();
+            loanApplication->setSender(_currentUser);
+            loanApplication->setAdvisor(client3.getAdvisor());
+            cin >> *loanApplication;
+
+            loanApplication->save();
+
+            // Notify the advisor
+            string notificationMessage = "New loan inquiry for " + to_string(loanApplication->getAmount()) + " from "
+                                         + _currentUser.getLastName() + " " + _currentUser.getFirstName();
+            Notification* notification = new Notification(notificationMessage, (unsigned) client3.getAdvisor());
+            notification->save();
+
+            break;
+        }
+
+        // Handle loans
+        case 13: {
+            cout << "Loans awaiting your approval:" << endl;
+
+            map<int, map<string, string>> loans = BaseModel::select("loans", "id, creation, validation, sender, approved, amount",
+                                                                            "advisor_id = " + to_string(_currentUser.getId()) + " AND validation = '0001-01-01'");
+
+            int totalLoans = (int)loans.size();
+
+            if (totalLoans > 0) {
+                cout << endl;
+                cout << "##############################" << endl;
+                cout << "#                            #" << endl;
+                cout << "#  --------- Loans --------- #" << endl;
+                cout << "#                            #" << endl;
+                cout << "##############################" << endl;
+
+                for (int i = 1; i != totalLoans + 1; i++)
+                {
+                    Client* sender = new Client((unsigned) stoi(loans[i]["sender"]));
+                    cout << loans[i]["id"] << ". " << loans[i]["amount"] << " by " << sender->getFirstName() << " " << sender->getLastName() << endl;
+                }
+
+                cout << "Which loan do you want to take care of?" << endl;
+                int loanId, choiceLoan;
+                cin >> loanId;
+
+                Loan* loanToHandle = new Loan((unsigned) loanId);
+
+                cout << "If you accept this loan, type 1, otherwise type 0" << endl;
+                cin >> choiceLoan;
+
+                if (choiceLoan == 1) {
+                    loanToHandle->validate();
+                    loanToHandle->save();
+                    cout << "Loan validated";
+                }
+                else {
+                    loanToHandle->decline();
+                    loanToHandle->save();
+                    cout << "Loan declined";
+                }
+            }
+            else {
+                cout << "No loans awaiting your approval." << endl;
+            }
         }
 
             // Ajout d'un compte bancaire
