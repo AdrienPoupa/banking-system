@@ -133,6 +133,14 @@ Client::Client(const std::string lastName, const std::string firstName, const Da
     _birthDate = birthDate;
 }
 
+void Client::setAdvisor(int idAdvisor) {
+    _idAdvisor = idAdvisor;
+}
+
+int Client::getAdvisor() {
+    return _idAdvisor;
+}
+
 void Client::contactAdvisor() {
     string message;
     Advisor *advisor = new Advisor((unsigned) this->_idAdvisor);

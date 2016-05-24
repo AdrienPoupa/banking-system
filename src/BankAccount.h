@@ -22,7 +22,7 @@ protected:
     unsigned int _idUser;
     static std::string _dbTable;
 public:
-    BankAccount(unsigned int user_id, const std::string swift, const std::string bic);
+    BankAccount(unsigned int user_id, const std::string swift, const std::string bic, const int balance);
     BankAccount();
     BankAccount(std::string swift, std::string bic, int idUser);
     BankAccount(const int id);
@@ -41,10 +41,13 @@ public:
 
     int ConsultAmount();
     void decreaseAmount(int less);
+    void setBalance(int balance);
 
     std::set<int> getExpenses();
     
     void Transfer(int amount, BankAccount* bc);
+
+    std::string static random_string(size_t length);
     
     void ConsultHistory();
 

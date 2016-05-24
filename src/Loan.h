@@ -15,12 +15,15 @@ protected:
     Date _creation;
     Date _validation;
     User _sender;
+    int _amount;
     bool _approved;
+    int _advisorId;
 
     static std::string _dbTable;
 public:
-    Loan(const Date creation, const Date validation, const User sender, const bool approved);
+    Loan(const Date creation, const Date validation, const User sender, const bool approved, const int amount, const int _advisorId);
     Loan (const unsigned int id);
+    Loan();
 
     unsigned int getId() const;
 
@@ -29,6 +32,15 @@ public:
 
     void setValidation(Date validation);
     Date getValidation();
+
+    void setAmount(int amount);
+    int getAmount();
+
+    void setSender(User sender);
+    User getSender();
+
+    void setAdvisor(int advisorId);
+    int getAdvisor();
 
     bool getApproved();
 
