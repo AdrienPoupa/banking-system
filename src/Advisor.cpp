@@ -122,13 +122,14 @@ void Advisor::TransferMoneyUser(){
     client->Transfer();
 }
 void Advisor::ConsultMessages() {
-    map<int, map<string, string>> messages = BaseModel::select("contact", "id, id_client, id_advisor, message");
+    map<int, map<string, string>> messages = BaseModel::select("contact", "id, id_client, id_advisor, message, date, read");
 
     int totalUsers = (int)messages.size();
 
     unsigned int messageToOpen;
     set<int> messageIds = set<int>();
     bool correctId = false;
+    std::string toRead = "";
     do{
         cout << "-------------------------------------------------------" << endl;
         cout << " -- Message's list --" << endl;
@@ -136,11 +137,14 @@ void Advisor::ConsultMessages() {
         cout << "-------------|-------------------" << endl;
         for (int i = 1; i != totalUsers + 1; i++)
         {
-
+            toRead = "";
+            if(stoi(messages[i]["read"]) == 0){
+                toRead = "New message*";
+            }
             Client *c = new Client(stoi(messages[i]["id_client"]));
             if(stoi(messages[i]["id_advisor"]) == this->_id) {
                 cout << messages[i]["id"] << " | " << c->getLastName() << " " << c->getFirstName() <<
-                "|" << messages[i]["date"] << "|" << messages[i]["read"]<<endl;
+                "|" << messages[i]["date"] << "|" << toRead <<endl;
                 messageIds.insert(stoi(messages[i]["id"]));
             }
         }
@@ -167,6 +171,7 @@ void Advisor::ConsultMessages() {
 
     Contact *m = new Contact(messageToOpen);
     cout << *m << endl;
+    m->read();
 
 }
 void Advisor::ValidateLoan() {
