@@ -16,15 +16,6 @@ string Loan::_dbTable = "loans";
  * Loan implementation
  */
 
-Loan::Loan(const Date creation, const Date validation, const User sender, const bool approved, const int amount, const int advisorId) :_creation(creation),
-                                                                                                 _validation(validation),
-                                                                                                _sender(sender),
-                                                                                                _approved(approved),
-                                                                                                _advisorId(advisorId),
-                                                                                                _amount(amount){
-    _id = 0;
-}
-
 Loan::Loan() {
     _creation = *new Date();
     _validation = *new Date(-1, -1, -1);
@@ -38,7 +29,7 @@ Loan::Loan(const unsigned int id) {
     if (!data.empty())
     {
         _id = id;
-        _sender = Client((unsigned) stoi(data["sender"]));
+        _sender = new Client((unsigned) stoi(data["sender"]));
         _advisorId = stoi(data["advisor_id"]);
         _creation = Date(data["creation"]);
         _validation = Date(data["validation"]);
@@ -71,11 +62,11 @@ Date Loan::getValidation() {
     return _validation;
 }
 
-void Loan::setSender(User sender) {
+void Loan::setSender(User* sender) {
     _sender = sender;
 }
 
-User Loan::getSender() {
+User* Loan::getSender() {
     return _sender;
 }
 
@@ -105,12 +96,12 @@ void Loan::validate() {
     this->save();
 
     // Create a new account with the amount
-    BankAccount* loanAccount = new BankAccount(_sender.getId(), BankAccount::random_string(11), BankAccount::random_string(8), _amount);
+    BankAccount* loanAccount = new BankAccount(_sender->getId(), BankAccount::random_string(11), BankAccount::random_string(8), _amount);
     loanAccount->save();
 
     // Notify the user
-    string notificationMessage = "Your loan inquiry for " + to_string(_amount) + " has been approved";
-    Notification* notification = new Notification(notificationMessage, _sender.getId());
+    string notificationMessage = "Your loan inquiry for RM" + to_string(_amount) + " has been approved";
+    Notification* notification = new Notification(notificationMessage, _sender->getId());
     notification->save();
 }
 
@@ -120,8 +111,8 @@ void Loan::decline() {
     this->save();
 
     // Notify the user
-    string notificationMessage = "Your loan inquiry for " + to_string(_amount) + " has been refused";
-    Notification* notification = new Notification(notificationMessage, _sender.getId());
+    string notificationMessage = "Your loan inquiry for RM" + to_string(_amount) + " has been refused";
+    Notification* notification = new Notification(notificationMessage, _sender->getId());
     notification->save();
 }
 
@@ -131,7 +122,7 @@ bool Loan::save()
             {"id", {to_string(_id), "int"}},
             {"creation", {_creation.dateToDB(), "string"}},
             {"validation", {_validation.dateToDB(), "string"}},
-            {"sender", {to_string(_sender.getId()), "int"}},
+            {"sender", {to_string(_sender->getId()), "int"}},
             {"advisor_id", {to_string(_advisorId), "int"}},
             {"amount", {to_string(_amount), "int"}},
             {"approved", {to_string((int) _approved), "int"}}

@@ -25,29 +25,6 @@ using namespace std;
 
 string User::_dbTable = "users";
 
-/*User::User(const std::string firstName, const std::string lastName, const Date birthDate, const string phone,
-           const int isAdmin, const int quota, const string password):
-    User(firstName, lastName, birthDate), _phone(phone), _isAdmin(isAdmin), _quota(quota), _password(password)
-{
-
-}
-
-User::User()
-{
-    _firstName = "John";
-    _lastName = "Doe";
-
-    _birthDate = Date();
-
-    _phone = "Inconnu";
-}
-*/
-/*
-User::~User()
-{
-
-}*/
-
 unsigned int User::getId() const {
     return _id;
 }
@@ -68,7 +45,7 @@ void User::setPhone(const string phone)
 void User::setPassword(const string password)
 {
     if (password.length() < 8) {
-        cout << "Password too short" << endl;
+        cout << "Password too short (must be 8 characters at least)" << endl;
     }
     else if (password == _firstName || password == _lastName) {
         cout << "Password same as username" << endl;
@@ -259,11 +236,9 @@ void User::edit()
         {
             remove();
             throw invalid_argument("You just deleted yourself");
-            break;
         }
         default:
             return;
-            break;
     }
 
     if (choice != 9 && choice != 0 )
@@ -273,6 +248,10 @@ void User::edit()
     }
 
     return;
+}
+
+User::~User() {
+
 }
 
 bool User::save()

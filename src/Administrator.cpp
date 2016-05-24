@@ -35,11 +35,6 @@ Administrator::Administrator(const unsigned int id) // Get a Administrator from 
         throw invalid_argument("Please enter a valid ID");
     }
 }
-/*
-Administrator::~Administrator()
-{
-
-}*/
 
 Administrator::Administrator(const std::string lastName, const std::string firstName, const std::string password) {
     _lastName = lastName;

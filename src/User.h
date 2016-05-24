@@ -43,9 +43,6 @@ public:
     void editLastname();
     void editBirthdate();
 
-    void init(std::map<std::string, std::string> data);
-    void deserialization(std::map<std::string, std::string> data);
-
     std::string getPhone()  const;
     void setPhone(const std::string phone);
 
@@ -69,6 +66,8 @@ public:
     
     friend std::ostream& operator<< (std::ostream& stream, const User& user);
     friend std::istream& operator>> (std::istream& stream, User& user);
+
+    virtual ~User() = 0;
 };
 
 #endif /* User_hpp */

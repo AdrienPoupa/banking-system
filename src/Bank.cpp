@@ -10,7 +10,7 @@ class NoDbException: public exception
 {
     virtual const char* what() const throw()
     {
-        return "The file bank.db3 isn't available.";
+        return "The file bank.db3 is not available.";
     }
 } NoDb;
 
@@ -20,7 +20,7 @@ Bank* Bank::getSingleton()
 {
     if (singleton == NULL)
     {
-        // check if bank.db3 exist
+        // check if bank.db3 exists
         ifstream mfile("bank.db3");
         if (mfile)
         {
@@ -60,12 +60,12 @@ Bank::~Bank()
 
 bool Bank::isAdmin()
 {
-    return _currentUser.isAdmin();
+    return _currentUser->isAdmin();
 }
 
 bool Bank::isAdvisor()
 {
-    return _currentUser.isAdvisor();
+    return _currentUser->isAdvisor();
 }
 
 void Bank::run()
@@ -142,7 +142,7 @@ bool Bank::connect()
             userIds.insert(stoi(users[i]["id"]));
         }
 
-        cout << endl << "ID : " << endl;
+        cout << endl << "ID: " << endl;
         cin >> idToOpen;
 
         if(cin.fail())
@@ -163,15 +163,15 @@ bool Bank::connect()
     } while(!correctId);
 
     if(stoi(users[correctId]["isadvisor"]) == 1){
-        Advisor accountToOpen(idToOpen);
+        Advisor* accountToOpen = new Advisor(idToOpen);
         _currentUser = accountToOpen;
     }
     else if(stoi(users[correctId]["isadmin"]) == 1){
-        Administrator accountToOpen(idToOpen);
+        Administrator* accountToOpen = new Administrator(idToOpen);
         _currentUser = accountToOpen;
     }
     else{
-        Client accountToOpen(idToOpen);
+        Client* accountToOpen = new Client(idToOpen);
         _currentUser = accountToOpen;
     }
 
@@ -182,7 +182,7 @@ bool Bank::connect()
         cout << "Password: " << endl;
         string inputPassword;
         cin >> inputPassword;
-        correctPass = _currentUser.checkPassword(inputPassword);
+        correctPass = _currentUser->checkPassword(inputPassword);
         essai--;
 
         if (correctPass)
@@ -204,7 +204,7 @@ int Bank::displayMenu()
     do
     {
         map<int, map<string, string>> notifications = BaseModel::select("notifications", "id, message, read",
-                                                      "userid = " + to_string(_currentUser.getId()) + " AND read = 0");
+                                                      "userid = " + to_string(_currentUser->getId()) + " AND read = 0");
 
         int totalNotifications = (int)notifications.size();
 
@@ -287,22 +287,22 @@ void Bank::redirectChoice(const int choice)
     // User action
         case 1:
             if(isAdvisor()){
-                Advisor advisor = Advisor(_currentUser.getId());
+                Advisor advisor = Advisor(_currentUser->getId());
                 advisor.getUserBankAccounts();
              }
         else if(!isAdvisor() && !isAdmin()){
-                Client client = Client(_currentUser.getId());
+                Client client = Client(_currentUser->getId());
                 client.getBankAccounts();
             }
              break;
 
          case 2:
              if(isAdvisor()){
-                 Advisor advisor = Advisor(_currentUser.getId());
+                 Advisor advisor = Advisor(_currentUser->getId());
                  advisor.TransferMoneyUser();
              }
              else if(!isAdvisor() && !isAdmin()){
-                 Client client = Client(_currentUser.getId());
+                 Client client = Client(_currentUser->getId());
                  client.Transfer();
              }
              break;
@@ -312,24 +312,24 @@ void Bank::redirectChoice(const int choice)
             cout << "New password: " << endl;
             cin.ignore(1, '\n');
             cin.getline(newPassword, '\n');
-            _currentUser.setPassword(newPassword);
-            _currentUser.save();
+            _currentUser->setPassword(newPassword);
+            _currentUser->save();
             break;
 
          case 4:
              if(isAdvisor()){
-                 Advisor advisor = Advisor(_currentUser.getId());
+                 Advisor advisor = Advisor(_currentUser->getId());
                  advisor.ConsultMessages();
              }
              else if(!isAdvisor() && !isAdmin()){
-                 Client client = Client(_currentUser.getId());
+                 Client client = Client(_currentUser->getId());
                  client.contactAdvisor();
              }
              break;
 
         // Expense history
         case 5: {
-            Client client = Client(_currentUser.getId());
+            Client client = Client(_currentUser->getId());
             set<int> accounts = client.getAccountsIds();
 
             for(auto i : accounts) {
@@ -343,10 +343,10 @@ void Bank::redirectChoice(const int choice)
 
         // Order a checkbook
         case 6: {
-            Client client = Client(_currentUser.getId());
+            Client client = Client(_currentUser->getId());
 
             cout << "Available accounts:" << endl;
-            Client client2 = Client(_currentUser.getId());
+            Client client2 = Client(_currentUser->getId());
 
             BankAccount* toOpen = client2.getBankAccounts();
 
@@ -362,10 +362,10 @@ void Bank::redirectChoice(const int choice)
 
         // Order a credit card
         case 7: {
-            Client client = Client(_currentUser.getId());
+            Client client = Client(_currentUser->getId());
 
             cout << "Available accounts:" << endl;
-            Client client2 = Client(_currentUser.getId());
+            Client client2 = Client(_currentUser->getId());
 
             BankAccount* toOpen = client2.getBankAccounts();
 
@@ -382,7 +382,7 @@ void Bank::redirectChoice(const int choice)
         // Add a transaction
         case 8: {
             cout << "Available accounts:" << endl;
-            Client client2 = Client(_currentUser.getId());
+            Client client2 = Client(_currentUser->getId());
 
             BankAccount* toOpen = client2.getBankAccounts();
 
@@ -410,7 +410,7 @@ void Bank::redirectChoice(const int choice)
 
         // Make a loan application
         case 12: {
-            Client client3 = Client(_currentUser.getId());
+            Client client3 = Client(_currentUser->getId());
 
             Loan* loanApplication = new Loan();
             loanApplication->setSender(_currentUser);
@@ -421,7 +421,7 @@ void Bank::redirectChoice(const int choice)
 
             // Notify the advisor
             string notificationMessage = "New loan inquiry for " + to_string(loanApplication->getAmount()) + " from "
-                                         + _currentUser.getLastName() + " " + _currentUser.getFirstName();
+                                         + _currentUser->getLastName() + " " + _currentUser->getFirstName();
             Notification* notification = new Notification(notificationMessage, (unsigned) client3.getAdvisor());
             notification->save();
 
@@ -433,7 +433,7 @@ void Bank::redirectChoice(const int choice)
             cout << "Loans awaiting your approval:" << endl;
 
             map<int, map<string, string>> loans = BaseModel::select("loans", "id, creation, validation, sender, approved, amount",
-                                                                            "advisor_id = " + to_string(_currentUser.getId()) + " AND validation = '0001-01-01'");
+                                                                            "advisor_id = " + to_string(_currentUser->getId()) + " AND validation = '0001-01-01'");
 
             int totalLoans = (int)loans.size();
 
@@ -463,17 +463,19 @@ void Bank::redirectChoice(const int choice)
                 if (choiceLoan == 1) {
                     loanToHandle->validate();
                     loanToHandle->save();
-                    cout << "Loan validated";
+                    cout << "Loan validated" << endl;
                 }
                 else {
                     loanToHandle->decline();
                     loanToHandle->save();
-                    cout << "Loan declined";
+                    cout << "Loan declined" << endl;
                 }
             }
             else {
                 cout << "No loans awaiting your approval." << endl;
             }
+
+            break;
         }
 
         // Add a bank account
@@ -491,7 +493,7 @@ void Bank::redirectChoice(const int choice)
 
                 cout << "UserId: " << endl;
                 cin >> userIDD;
-                newbankaccount->setUserId(userIDD);
+                newbankaccount->setUserId((unsigned) userIDD);
                 cout << "Swift: " << endl;
                 cin >> swift2;
                 newbankaccount->setSwift(swift2);
@@ -506,7 +508,7 @@ void Bank::redirectChoice(const int choice)
             }
             else
             {
-
+                cout << "You are not allowed to perform this action" << endl;
             }
 
             break;
@@ -516,17 +518,17 @@ void Bank::redirectChoice(const int choice)
 
             if(isAdvisor()){
 
-                    BankAccount* newbankaccount = new BankAccount();
+                BankAccount* newbankaccount = new BankAccount();
 
-                    int userIDD;
-                    int id_;
+                int userIDD;
+                int id_;
 
-                    newbankaccount->getusersIDS();
+                newbankaccount->getusersIDS();
 
                 cout << "Choose the client that you want to close an account by putting the IDuser: " << endl;
                 cin >> userIDD;
 
-                Client client2 = Client(userIDD);
+                Client client2 = Client((unsigned) userIDD);
 
                 BankAccount* toOpen = client2.getBankAccounts();
 
@@ -539,8 +541,10 @@ void Bank::redirectChoice(const int choice)
             }
             else
             {
-
+                cout << "You are not allowed to perform this action" << endl;
             }
+
+            break;
         }
 
          default:

@@ -120,7 +120,7 @@ void BankAccount::ConsultHistory() {
     cout << "Expenses for account: " << getId() << endl;
     set<int> expenses = getExpenses();
     for (auto j : expenses) {
-        Transaction* transaction = new Transaction(j);
+        Transaction* transaction = new Transaction((unsigned) j);
         cout << *transaction << endl;
     }
 }
@@ -185,7 +185,7 @@ istream& operator>> (std::istream& stream, BankAccount& bankAccount)
     stream >> bankAccount._swift;
     cout << "BIC: " << endl;
     stream >> bankAccount._bic;
-    cout << "Balance: " << endl;
+    cout << "Balance: RM" << endl;
     stream >> bankAccount._balance;
 
     return stream;
@@ -193,9 +193,6 @@ istream& operator>> (std::istream& stream, BankAccount& bankAccount)
 }
 
 void BankAccount::getusersIDS() {
-
-    BankAccount* test = new BankAccount();
-
     map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname, isadmin, isadvisor");
     int totalUsers = (int)users.size();
     set<int> userIds = set<int>();
@@ -229,7 +226,6 @@ void BankAccount::getusersIDS() {
         cout << space << users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] << endl;
         userIds.insert(stoi(users[i]["id"]));
     }
-
 }
 
 bool BankAccount::remove()

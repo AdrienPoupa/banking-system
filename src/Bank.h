@@ -23,7 +23,7 @@
 #include "../sqlite/SQLiteCpp.h"
 
 class Bank {
-    User _currentUser;
+    User* _currentUser;
 
     public:
         static Bank *getSingleton();

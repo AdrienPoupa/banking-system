@@ -11,7 +11,6 @@ using namespace std;
  * Client implementation
  */
 
-
 Client::Client(const unsigned int id) // Get a Client from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
@@ -34,11 +33,7 @@ Client::Client(const unsigned int id) // Get a Client from an ID provided by DB
         throw invalid_argument("Please enter a valid ID");
     }
 }
-/*
-Client::~Client()
-{
 
-}*/
 BankAccount* Client::getBankAccounts() {
     map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id, swift, BIC, id_user, balance",
                                                                   "id_user = " + to_string(getId()));
@@ -87,7 +82,7 @@ BankAccount* Client::getBankAccounts() {
 
 
 set<int> Client::getAccountsIds() {
-    map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id", "id_user=" + to_string(_id));
+    map<int, map<string, string>> bankAccount = BaseModel::select("bank_account", "id", "id_user = " + to_string(_id));
 
     int totalAccount = (int)bankAccount.size();
 
@@ -127,6 +122,8 @@ void Client::Transfer(){
         }
     }
 }
+
+
 
 Client::Client(const std::string lastName, const std::string firstName, const Date birthDate){
     _lastName = lastName;
